@@ -48,6 +48,10 @@ the browser only ever talks to one domain and the login cookie is shared.
 
 "PDF" buttons use the browser's print dialog ("Save as PDF").
 
+Search and sharing: `/sitemap.xml` lists the public pages and every published
+car; `/robots.txt` keeps the login and panels out of search; car pages carry
+share previews (photo, name, monthly price). Both use `SITE_URL`.
+
 ## Rules built in
 
 - Dealer and leasing company are flags on one `Organization`, so the open
@@ -86,8 +90,9 @@ Needs accounts on GitHub, Vercel, Railway (or Render) and Cloudflare R2.
 3. **Photos on Cloudflare R2**: create a bucket with a public custom domain
    (e.g. `photos.avtomobilebi.ge`) and an API token; fill the `S3_*` variables.
 4. **Site on Vercel**: import the repo, root directory `web`. Set `API_URL`
-   (the Railway URL, later `https://api.avtomobilebi.ge`),
-   `INTERNAL_API_TOKEN` (same value as the API) and `PHOTOS_HOST`.
+   (the Railway URL, later `https://api.avtomobilebi.ge`), `SITE_URL`
+   (`https://avtomobilebi.ge`), `INTERNAL_API_TOKEN` (same value as the API)
+   and `PHOTOS_HOST`.
 5. **Domain**: point `avtomobilebi.ge` at Vercel and `api.avtomobilebi.ge` at
    Railway (each shows the DNS records to add at the domain registrar).
 6. **Email / SMS**: fill the `EMAIL_*` variables. SMS is only logged until a

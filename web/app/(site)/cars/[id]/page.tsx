@@ -11,9 +11,18 @@ import { FORM_ID } from "./form-id";
 export async function generateMetadata({ params }: PageProps<"/cars/[id]">): Promise<Metadata> {
   const car = await getCar((await params).id);
   if (!car) return { title: "მანქანა ვერ მოიძებნა" };
+  const title = `${car.make} ${car.model} ${car.year}`;
+  const description = `${gel(car.price_gel)} · ლიზინგით თვიურად ${gel(car.monthly_from)}-დან · ${car.city}`;
   return {
-    title: `${car.make} ${car.model} ${car.year}`,
-    description: `${car.make} ${car.model} ${car.year} · ${gel(car.price_gel)} · ლიზინგით თვიურად ${gel(car.monthly_from)}-დან`,
+    title,
+    description,
+    // Shown when the link is shared (Facebook, Messenger, Viber…).
+    openGraph: {
+      title: `${title} · თვიურად ${gel(car.monthly_from)}-დან`,
+      description,
+      url: `/cars/${car.id}`,
+      images: car.photos[0] ? [{ url: car.photos[0], alt: title }] : undefined,
+    },
   };
 }
 

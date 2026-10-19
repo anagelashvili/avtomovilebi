@@ -73,7 +73,7 @@ export default function ApplicationPage() {
             {app.contract_number && (
               <div className="flex justify-between gap-4 border-b border-brand-soft py-2.5">
                 <dt className="text-muted">ხელშეკრულების ნომერი</dt>
-                <dd className="font-bold">{app.contract_number}</dd>
+                <dd className="whitespace-nowrap text-right font-bold">{app.contract_number}</dd>
               </div>
             )}
           </dl>

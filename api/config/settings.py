@@ -162,6 +162,7 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    "EXCEPTION_HANDLER": "core.exceptions.exception_handler",
     "DEFAULT_THROTTLE_RATES": {
         "apply": os.environ.get("THROTTLE_APPLY", "5/hour"),
         "open_code": os.environ.get("THROTTLE_OPEN_CODE", "30/hour"),

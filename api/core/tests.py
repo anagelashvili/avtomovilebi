@@ -224,6 +224,12 @@ class DealerApiTests(TestCase):
         car.refresh_from_db()
         self.assertEqual(car.status, Car.Status.DRAFT)
 
+    def test_errors_are_in_georgian(self):
+        r = self.client.post("/api/dealer/cars/", {"year": "abc"}, format="json")
+        self.assertEqual(r.json()["year"], ["მიუთითეთ რიცხვი."])
+        self.assertTrue(all(not m.isascii() for m in r.json()["make"]))  # Django's own Georgian wording
+        self.assertEqual(APIClient().get("/api/dealer/cars/").json()["detail"], "გთხოვთ, შეხვიდეთ სისტემაში.")
+
     def test_non_image_upload_is_refused(self):
         car = make_car(self.dealer)
         fake = SimpleUploadedFile("x.jpg", b"not an image", content_type="image/jpeg")
