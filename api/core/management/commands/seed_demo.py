@@ -4,7 +4,8 @@ the cars from the mockup, and a login for each organisation.
     python manage.py seed_demo --photos path/to/folder
 
 The folder should hold p1.jpg, p3.jpg, p4.jpg, p8.jpg (the mockup photos).
-Running it again resets the demo organisations.
+Running it again resets the demo organisations, their cars and applications.
+Logins are written to .demo-logins.txt in the repo root (git-ignored).
 """
 
 import secrets
@@ -14,7 +15,9 @@ from django.conf import settings
 from django.core.files import File
 from django.core.management.base import BaseCommand, CommandError
 
-from core.models import Car, CarPhoto, LeaseOffer, Organization, User
+from core.models import (
+    Application, Car, CarPhoto, Invoice, InvoiceItem, LeaseOffer, Organization, StatusChange, User,
+)
 
 CARS = [
     ("A-101", "Chevrolet", "Corvette Z06", 2023, "coupe", "petrol", "6.2", 12400, 98000, "თბილისი", "p1.jpg", 3577),
@@ -40,6 +43,11 @@ class Command(BaseCommand):
             raise CommandError(f"Missing photos in {folder}: {', '.join(missing)}")
 
         codes = ["demo-dealer"] + [c for c, _ in LEASING]
+        demo_apps = Application.objects.filter(leasing_company__code__in=codes)
+        InvoiceItem.objects.filter(application__in=demo_apps).delete()
+        Invoice.objects.filter(leasing_company__code__in=codes).delete()
+        StatusChange.objects.filter(application__in=demo_apps).delete()
+        demo_apps.delete()
         User.objects.filter(organization__code__in=codes).delete()
         Organization.objects.filter(code__in=codes).delete()
 
@@ -65,11 +73,17 @@ class Command(BaseCommand):
                     down_payment_gel=price // 5, monthly_gel=monthly + 150 * i,
                 )
 
-        lines = []
-        for username, org in [("dealer", dealer), ("leasing-a", companies[0])]:
+        companies[0].commission_value = 300
+        companies[0].save(update_fields=["commission_value"])
+
+        lines = ["Demo logins (local development only):"]
+        for username, org, role in [("dealer", dealer, "dealer"), ("leasing-a", companies[0], "leasing company A")]:
             password = secrets.token_urlsafe(9)
             User.objects.create_user(username, password=password, organization=org, role="owner")
-            lines.append(f"  {username:<10} {password}   ({org.name})")
+            lines.append(f"  {username:<10} {password}   ({role})")
 
-        self.stdout.write(self.style.SUCCESS(f"Created {len(CARS)} cars. Logins:"))
-        self.stdout.write("\n".join(lines))
+        # Written as UTF-8 to a git-ignored file: the Windows console can't
+        # always print it, and passwords shouldn't sit in terminal history.
+        out = Path(settings.BASE_DIR).parent / ".demo-logins.txt"
+        out.write_text("\n".join(lines) + "\n", encoding="utf-8")
+        self.stdout.write(self.style.SUCCESS(f"Created {len(CARS)} cars. Logins written to {out}"))

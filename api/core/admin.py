@@ -1,14 +1,15 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
+from .invoicing import generate_invoices, previous_month
 from .models import (
-    Application, Car, CarPhoto, Invoice, LeaseOffer, Organization, StatusChange, User,
+    Application, Car, CarPhoto, Invoice, InvoiceItem, LeaseOffer, Organization, StatusChange, User,
 )
 
 
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ["name", "code", "is_dealer", "is_leasing", "phone"]
+    list_display = ["name", "code", "is_dealer", "is_leasing", "commission_type", "commission_value", "phone"]
     list_filter = ["is_dealer", "is_leasing"]
     search_fields = ["name", "code"]
     prepopulated_fields = {"code": ["name"]}
@@ -64,8 +65,26 @@ class ApplicationAdmin(admin.ModelAdmin):
     inlines = [StatusChangeInline]
 
 
+class InvoiceItemInline(admin.TabularInline):
+    model = InvoiceItem
+    extra = 0
+    can_delete = False
+    readonly_fields = ["application", "amount_gel"]
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
 @admin.register(Invoice)
 class InvoiceAdmin(admin.ModelAdmin):
     list_display = ["leasing_company", "month", "amount_gel", "status"]
     list_filter = ["status", "leasing_company"]
-    filter_horizontal = ["applications"]
+    readonly_fields = ["leasing_company", "month", "amount_gel"]
+    inlines = [InvoiceItemInline]
+    actions = ["generate_previous_month"]
+
+    @admin.action(description="წინა თვის ინვოისების შექმნა")
+    def generate_previous_month(self, request, queryset):
+        month = previous_month()
+        invoices = generate_invoices(month)
+        self.message_user(request, f"{month:%Y-%m}: განახლდა {len(invoices)} ინვოისი.")

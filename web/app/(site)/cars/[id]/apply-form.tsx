@@ -33,6 +33,8 @@ export function ApplyForm({ carId }: { carId: number }) {
       <b className="text-[17px]">გაგზავნე განაცხადი</b>
       <p className="text-sm text-muted">აირჩიეთ შეთავაზება ცხრილში და შეავსეთ ფორმა.</p>
       <input type="hidden" name="car" value={carId} />
+      {/* Honeypot: hidden from people, often filled in by bots. */}
+      <input type="text" name="website" tabIndex={-1} autoComplete="off" aria-hidden="true" className="absolute -left-[9999px] size-px opacity-0" />
       <Field name="first_name" label="სახელი" required autoComplete="given-name" error={err.first_name} />
       <Field name="last_name" label="გვარი" required autoComplete="family-name" error={err.last_name} />
       <Field name="personal_id" label="პირადი ნომერი" required inputMode="numeric" maxLength={11} error={err.personal_id} />

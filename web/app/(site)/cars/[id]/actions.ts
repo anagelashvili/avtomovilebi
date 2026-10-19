@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import { API_URL } from "@/lib/api";
 
 export type ApplyState =
@@ -27,11 +28,21 @@ export async function submitApplication(_prev: ApplyState, form: FormData): Prom
     return { status: "error", fields: { offer: "აირჩიეთ ლიზინგის შეთავაზება." } };
   }
 
+  body.website = String(form.get("website") ?? ""); // honeypot
+
+  // The API limits applications per visitor; tell it who the visitor is.
+  const h = await headers();
+  const clientIp = (h.get("x-forwarded-for") ?? "").split(",")[0].trim() || h.get("x-real-ip") || "";
+
   let res: Response;
   try {
     res = await fetch(`${API_URL}/api/public/applications/`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Client-IP": clientIp,
+        "X-Internal-Token": process.env.INTERNAL_API_TOKEN ?? "",
+      },
       body: JSON.stringify(body),
       cache: "no-store",
     });
@@ -41,6 +52,9 @@ export async function submitApplication(_prev: ApplyState, form: FormData): Prom
 
   const data = await res.json().catch(() => ({}));
   if (res.status === 201) return { status: "sent", ...data };
+  if (res.status === 429) {
+    return { status: "error", message: "ძალიან ბევრი განაცხადი. სცადეთ ცოტა ხანში.", fields: {} };
+  }
   if (res.status === 400) {
     const fields: Record<string, string> = {};
     for (const [k, v] of Object.entries(data)) fields[k] = [v].flat().join(" ");

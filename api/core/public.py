@@ -1,7 +1,9 @@
 """Public (no login) endpoints for the buyer side of the site."""
 
 import re
+import secrets
 
+from django.conf import settings
 from django.db import transaction
 from django.db.models import Min, Prefetch
 from django.shortcuts import get_object_or_404
@@ -10,6 +12,7 @@ from rest_framework import serializers, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework.throttling import SimpleRateThrottle
 from rest_framework.views import APIView
 
 from . import notify
@@ -196,11 +199,32 @@ class ApplicationCreateSerializer(serializers.Serializer):
         return data
 
 
+class ApplyThrottle(SimpleRateThrottle):
+    """Limits applications per visitor IP.
+
+    The site's server action forwards the visitor's IP in X-Client-IP, signed
+    with the shared INTERNAL_API_TOKEN; anyone else is limited by their own IP.
+    """
+
+    scope = "apply"
+
+    def get_cache_key(self, request, view):
+        token = settings.INTERNAL_API_TOKEN
+        ip = None
+        if token and secrets.compare_digest(request.headers.get("X-Internal-Token", ""), token):
+            ip = request.headers.get("X-Client-IP")
+        return self.cache_format % {"scope": self.scope, "ident": ip or self.get_ident(request)}
+
+
 class PublicApplicationCreate(APIView):
     authentication_classes = PUBLIC["authentication_classes"]
     permission_classes = PUBLIC["permission_classes"]
+    throttle_classes = [ApplyThrottle]
 
     def post(self, request):
+        # Honeypot: a hidden field people never fill in, bots often do.
+        if request.data.get("website"):
+            return Response({"detail": "განაცხადი ვერ გაიგზავნა."}, status=status.HTTP_400_BAD_REQUEST)
         s = ApplicationCreateSerializer(data=request.data)
         s.is_valid(raise_exception=True)
         d = s.validated_data

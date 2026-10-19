@@ -15,3 +15,4 @@ node_modules/
 # Office temp files
 ~$*
 .demo-logins.txt
+.demo-code.txt

@@ -1,9 +1,15 @@
 import shutil
 import tempfile
-from io import BytesIO
+from io import BytesIO, StringIO
 
+from datetime import date, timedelta
+from decimal import Decimal
+
+from django.core import mail
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.management import call_command
 from django.db import connection
 from django.test import TestCase, override_settings
 from django.utils import timezone
@@ -12,7 +18,8 @@ from PIL import Image
 from rest_framework.test import APIClient
 
 from .excel_import import COLUMNS, ImportFileError, import_cars
-from .models import Application, Car, LeaseOffer, Organization, StatusChange, User
+from .invoicing import generate_invoices
+from .models import Application, Car, Invoice, LeaseOffer, Organization, StatusChange, User
 
 HEADERS = list(COLUMNS)
 
@@ -226,6 +233,7 @@ class DealerApiTests(TestCase):
 
 class PublicApiTests(TestCase):
     def setUp(self):
+        cache.clear()  # throttle counters
         self.dealer = Organization.objects.create(name="D", code="d", is_dealer=True)
         self.a = Organization.objects.create(name="კომპანია A", code="a", is_leasing=True)
         self.b = Organization.objects.create(name="კომპანია B", code="b", is_leasing=True)
@@ -291,3 +299,119 @@ class PublicApiTests(TestCase):
         self.assertEqual(self.application(offer=other_offer.id).status_code, 400)
         self.assertEqual(self.application(car=self.draft.id).status_code, 400)
         self.assertFalse(Application.objects.exists())
+
+    def test_honeypot_and_rate_limit(self):
+        self.assertEqual(self.application(website="http://spam").status_code, 400)
+        cache.clear()
+        codes = [self.application().status_code for _ in range(6)]
+        self.assertEqual(codes, [201] * 5 + [429])
+
+    @override_settings(INTERNAL_API_TOKEN="secret")
+    def test_rate_limit_is_per_forwarded_visitor_ip(self):
+        def post(ip, token="secret"):
+            return self.client.post(
+                "/api/public/applications/",
+                dict(car=self.ix3.id, offer=self.offer_a.id, first_name="ა", last_name="ბ",
+                     personal_id="01001012345", phone="555123456", consent=True),
+                format="json", HTTP_X_INTERNAL_TOKEN=token, HTTP_X_CLIENT_IP=ip,
+            ).status_code
+        self.assertEqual([post("1.1.1.1") for _ in range(6)][-1], 429)
+        self.assertEqual(post("2.2.2.2"), 201)  # another visitor is not blocked
+        # Without the right token the claimed IP is ignored: all count as the caller's own IP.
+        codes = [post(f"9.9.9.{i}", token="wrong") for i in range(6)]
+        self.assertEqual(codes[-1], 429)
+
+
+class LeasingTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        dealer = Organization.objects.create(name="D", code="d", is_dealer=True)
+        self.a = Organization.objects.create(
+            name="A", code="a", is_leasing=True, commission_type="percent", commission_value=Decimal("1.5")
+        )
+        self.b = Organization.objects.create(name="B", code="b", is_leasing=True, commission_value=Decimal("300"))
+        self.car = make_car(dealer, price_gel=80000, status=Car.Status.ACTIVE)
+        offer_a = LeaseOffer.objects.create(car=self.car, leasing_company=self.a, term_months=36, down_payment_gel=0, monthly_gel=2500)
+        offer_b = LeaseOffer.objects.create(car=self.car, leasing_company=self.b, term_months=36, down_payment_gel=0, monthly_gel=2600)
+        base = dict(car=self.car, first_name="ნინო", last_name="ბერიძე", personal_id="01001012345", phone="555123456", consent_at=timezone.now())
+        self.app = Application.objects.create(offer=offer_a, **base)
+        self.other = Application.objects.create(offer=offer_b, **base)
+        self.manager = User.objects.create_user("m", password="x", organization=self.a, first_name="გიორგი")
+        self.client = APIClient()
+        self.client.force_authenticate(self.manager)
+
+    def test_list_hides_code_and_details_until_opened(self):
+        rows = self.client.get("/api/leasing/applications/").json()
+        self.assertEqual(len(rows), 1)  # only this company's applications
+        self.assertEqual(rows[0]["code"], "GL-•••••")
+        self.assertNotIn("personal_id", rows[0])
+        self.assertNotIn("123456", rows[0]["phone"])
+        self.assertEqual(self.client.get(f"/api/leasing/applications/{self.app.code}/").status_code, 404)
+
+    def test_open_with_code_reveals_details_logs_and_texts_client(self):
+        with self.assertLogs("core.notify", "INFO") as logs, self.captureOnCommitCallbacks(execute=True):
+            r = self.client.post("/api/leasing/applications/open/", {"code": self.app.code.lower().replace("-", " ")}, format="json")
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual((r.json()["personal_id"], r.json()["status"]), ("01001012345", "arrived"))
+        self.assertIn("გახსნა", logs.output[0])
+        self.assertEqual(self.client.get("/api/leasing/applications/").json()[0]["code"], self.app.code)
+        self.assertEqual(StatusChange.objects.get(application=self.app).user, self.manager)
+
+    def test_cannot_open_another_companys_code_and_guessing_is_limited(self):
+        r = self.client.post("/api/leasing/applications/open/", {"code": self.other.code}, format="json")
+        self.assertEqual(r.status_code, 404)
+        codes = [self.client.post("/api/leasing/applications/open/", {"code": "GL-00000"}, format="json").status_code for _ in range(30)]
+        self.assertEqual(codes[-1], 429)
+
+    def test_status_flow_through_api(self):
+        self.client.post("/api/leasing/applications/open/", {"code": self.app.code}, format="json")
+        url = f"/api/leasing/applications/{self.app.code}/status/"
+        self.assertEqual(self.client.post(url, {"status": "signed"}, format="json").status_code, 400)
+        r = self.client.post(url, {"status": "signed", "contract_number": "77/2026"}, format="json")
+        self.assertEqual((r.status_code, r.json()["status"]), (200, "signed"))
+
+    def sign(self, app, when):
+        app.change_status("arrived", self.manager)
+        app.change_status("signed", self.manager, contract_number="1")
+        Application.objects.filter(pk=app.pk).update(signed_at=when)
+
+    def test_invoices_once_per_deal_with_commission_rules(self):
+        sept = timezone.make_aware(timezone.datetime(2026, 9, 15, 12))
+        self.sign(self.app, sept)
+        self.sign(self.other, sept)
+        generate_invoices(date(2026, 9, 1))
+        generate_invoices(date(2026, 9, 1))  # running twice adds nothing
+        inv_a = Invoice.objects.get(leasing_company=self.a)
+        self.assertEqual((inv_a.items.count(), inv_a.amount_gel), (1, Decimal("1200.00")))  # 1.5% of 80 000
+        self.assertEqual(Invoice.objects.get(leasing_company=self.b).amount_gel, Decimal("300.00"))
+        self.assertFalse(generate_invoices(date(2026, 10, 1)))
+
+        r = self.client.get(f"/api/leasing/invoices/{inv_a.id}/").json()
+        self.assertEqual((r["items"][0]["code"], r["amount_gel"]), (self.app.code, "1200.00"))
+        inv_b = Invoice.objects.get(leasing_company=self.b)
+        self.assertEqual(self.client.get(f"/api/leasing/invoices/{inv_b.id}/").status_code, 404)
+
+    def test_staff_overview_and_suspicious(self):
+        self.assertEqual(self.client.get("/api/staff/overview/").status_code, 403)
+        staff = User.objects.create_user("s", password="x", is_staff=True)
+        c = APIClient()
+        c.force_authenticate(staff)
+        self.app.change_status("arrived", self.manager)
+        Application.objects.filter(pk=self.app.pk).update(status_changed_at=timezone.now() - timedelta(days=31))
+        month = f"{timezone.localdate():%Y-%m}"
+        data = c.get(f"/api/staff/overview/?month={month}").json()
+        row_a = next(r for r in data["companies"] if r["company"] == "A")
+        self.assertEqual((row_a["applications"], row_a["arrived"]), (1, 1))
+        self.assertEqual([s["code"] for s in data["suspicious"]], [self.app.code])
+
+
+class ReminderTests(TestCase):
+    def test_morning_email_goes_to_dealer_users(self):
+        dealer = Organization.objects.create(name="D", code="d", is_dealer=True)
+        make_car(dealer, status=Car.Status.DRAFT)
+        User.objects.create_user("d", email="d@example.com", organization=dealer)
+        User.objects.create_user("noemail", organization=dealer)
+        call_command("send_dealer_reminders", stdout=StringIO())
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertIn("/dealer/import", mail.outbox[0].body)
+        self.assertIn("დრაფტ", mail.outbox[0].body)

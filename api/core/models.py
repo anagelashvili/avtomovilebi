@@ -1,4 +1,5 @@
 import secrets
+from decimal import Decimal
 
 from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError
@@ -23,6 +24,19 @@ class Organization(models.Model):
     phone = models.CharField("ტელეფონი", max_length=40, blank=True)
     email = models.EmailField("ელ-ფოსტა", blank=True)
     address = models.CharField("მისამართი", max_length=300, blank=True)
+
+    # How commission is charged is still open in the plan (§8), so it's set
+    # per leasing company in the admin rather than hard-coded.
+    class Commission(models.TextChoices):
+        FIXED = "fixed", "ფიქსირებული თანხა, ლ"
+        PERCENT = "percent", "პროცენტი მანქანის ფასიდან"
+
+    commission_type = models.CharField(
+        "საკომისიოს ტიპი", max_length=10, choices=Commission.choices, default=Commission.FIXED
+    )
+    commission_value = models.DecimalField(
+        "საკომისიოს ოდენობა", max_digits=10, decimal_places=2, default=0
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -32,6 +46,11 @@ class Organization(models.Model):
 
     def __str__(self):
         return self.name
+
+    def commission_for(self, application):
+        if self.commission_type == self.Commission.PERCENT:
+            return (Decimal(application.car.price_gel) * self.commission_value / 100).quantize(Decimal("0.01"))
+        return self.commission_value
 
 
 class User(AbstractUser):
@@ -200,6 +219,8 @@ class Application(models.Model):
     )
     contract_number = models.CharField("ხელშეკრულების ნომერი", max_length=60, blank=True)
     opened_at = models.DateTimeField("კოდი შეყვანილია", null=True, blank=True, editable=False)
+    signed_at = models.DateTimeField("გაფორმდა", null=True, blank=True, editable=False)
+    status_changed_at = models.DateTimeField(null=True, blank=True, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -209,6 +230,11 @@ class Application(models.Model):
 
     def __str__(self):
         return self.code
+
+    @property
+    def is_opened(self):
+        """Full details are visible only after the company entered the code."""
+        return self.opened_at is not None
 
     def save(self, *args, **kwargs):
         if not self.code:
@@ -237,9 +263,13 @@ class Application(models.Model):
                 raise ValidationError("„გაფორმდა“-სთვის ხელშეკრულების ნომერი სავალდებულოა.")
             self.contract_number = contract_number
         old = self.status
+        now = timezone.now()
         self.status = new_status
+        self.status_changed_at = now
         if new_status == self.Status.ARRIVED and not self.opened_at:
-            self.opened_at = timezone.now()
+            self.opened_at = now
+        if new_status == self.Status.SIGNED:
+            self.signed_at = now
         self.save()
         StatusChange.objects.create(
             application=self, user=user, from_status=old, to_status=new_status, note=note
@@ -272,7 +302,6 @@ class Invoice(models.Model):
         Organization, on_delete=models.PROTECT, related_name="invoices"
     )
     month = models.DateField("თვე", help_text="თვის პირველი დღე")
-    applications = models.ManyToManyField(Application, related_name="invoices")
     amount_gel = models.DecimalField("თანხა, ლ", max_digits=12, decimal_places=2)
     status = models.CharField(max_length=20, choices=Status.choices, default=Status.DRAFT)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -280,8 +309,27 @@ class Invoice(models.Model):
     class Meta:
         verbose_name = "ინვოისი"
         verbose_name_plural = "ინვოისები"
+        ordering = ["-month"]
         constraints = [
             models.UniqueConstraint(
                 fields=["leasing_company", "month"], name="one_invoice_per_company_month"
             )
         ]
+
+    def __str__(self):
+        return f"{self.leasing_company} · {self.month:%Y-%m}"
+
+
+class InvoiceItem(models.Model):
+    """One signed deal on an invoice, with the commission as charged then
+    (so later changes to prices or rates don't rewrite old invoices)."""
+
+    invoice = models.ForeignKey(Invoice, on_delete=models.CASCADE, related_name="items")
+    application = models.OneToOneField(
+        Application, on_delete=models.PROTECT, related_name="invoice_item"
+    )
+    amount_gel = models.DecimalField("საკომისიო, ლ", max_digits=12, decimal_places=2)
+
+    class Meta:
+        verbose_name = "ინვოისის სტრიქონი"
+        verbose_name_plural = "ინვოისის სტრიქონები"

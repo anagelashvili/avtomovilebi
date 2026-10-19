@@ -28,7 +28,14 @@ if not DEBUG and SECRET_KEY == "dev-only-insecure-key":
     raise RuntimeError("DJANGO_SECRET_KEY must be set in production")
 
 ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
-CSRF_TRUSTED_ORIGINS = env_list("DJANGO_CSRF_TRUSTED_ORIGINS")
+# The browser talks to the API through the Next.js site (it proxies /api/*),
+# so the site's origin must be trusted for CSRF.
+CSRF_TRUSTED_ORIGINS = env_list(
+    "DJANGO_CSRF_TRUSTED_ORIGINS", "http://localhost:3000,http://127.0.0.1:3000" if DEBUG else ""
+)
+
+# Shared secret between the Next.js server and this API (see ApplyThrottle).
+INTERNAL_API_TOKEN = os.environ.get("INTERNAL_API_TOKEN", "")
 
 # Key for encrypting personal data (personal ID number, phone) at rest.
 # Generate one with:
@@ -109,6 +116,31 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# Car photos: local folder in development; S3-compatible storage (Cloudflare
+# R2, AWS S3) in production when S3_BUCKET is set.
+STORAGES = {
+    "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage" if DEBUG
+        else "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    },
+}
+if os.environ.get("S3_BUCKET"):
+    STORAGES["default"] = {
+        "BACKEND": "storages.backends.s3.S3Storage",
+        "OPTIONS": {
+            "bucket_name": os.environ["S3_BUCKET"],
+            "endpoint_url": os.environ.get("S3_ENDPOINT_URL") or None,
+            "access_key": os.environ.get("S3_ACCESS_KEY_ID"),
+            "secret_key": os.environ.get("S3_SECRET_ACCESS_KEY"),
+            "region_name": os.environ.get("S3_REGION", "auto"),
+            # Public URL of the bucket (e.g. an R2 custom domain); photos are public.
+            "custom_domain": os.environ.get("S3_PUBLIC_DOMAIN") or None,
+            "querystring_auth": False,
+            "file_overwrite": False,
+        },
+    }
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # The Next.js site lives on the parent domain (avtomobilebi.ge) and the API on
@@ -119,6 +151,9 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+    SECURE_SSL_REDIRECT = True
+    # Start with one day; raise once HTTPS is confirmed on the real domain.
+    SECURE_HSTS_SECONDS = int(os.environ.get("SECURE_HSTS_SECONDS", "86400"))
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -127,7 +162,21 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    "DEFAULT_THROTTLE_RATES": {
+        "apply": os.environ.get("THROTTLE_APPLY", "5/hour"),
+        "open_code": os.environ.get("THROTTLE_OPEN_CODE", "30/hour"),
+    },
 }
+
+# Throttle counters live in the cache. With several API instances, point
+# this at a shared cache (e.g. Redis) instead of per-process memory.
+CACHES = {"default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}}
+
+# Printed on invoices.
+INVOICE_BANK_DETAILS = os.environ.get(
+    "INVOICE_BANK_DETAILS", "[კომპანიის სახელი] · [ს/კ] · [ბანკი] · [IBAN]"
+)
+SITE_URL = os.environ.get("SITE_URL", "http://localhost:3000")
 
 EMAIL_BACKEND = os.environ.get(
     "DJANGO_EMAIL_BACKEND",

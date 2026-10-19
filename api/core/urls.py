@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from . import public, views
+from . import leasing, public, views
 
 router = DefaultRouter()
 router.register("dealer/cars", views.DealerCarViewSet, basename="dealer-car")
@@ -18,5 +18,14 @@ urlpatterns = [
     path("auth/me/", views.MeView.as_view()),
     path("dealer/import/", views.ExcelImportView.as_view()),
     path("dealer/import/template/", views.ExcelTemplateView.as_view()),
+    path("leasing/applications/", leasing.LeasingApplications.as_view()),
+    path("leasing/applications/open/", leasing.LeasingOpenCode.as_view()),
+    path("leasing/applications/<str:code>/", leasing.LeasingApplicationDetail.as_view()),
+    path("leasing/applications/<str:code>/status/", leasing.LeasingApplicationStatus.as_view()),
+    path("leasing/invoices/", leasing.LeasingInvoices.as_view()),
+    path("leasing/invoices/<int:pk>/", leasing.LeasingInvoiceDetail.as_view()),
+    path("staff/overview/", leasing.StaffOverview.as_view()),
+    path("staff/invoices/generate/", leasing.StaffGenerateInvoices.as_view()),
+    path("staff/invoices/<int:pk>/status/", leasing.StaffInvoiceStatus.as_view()),
     path("", include(router.urls)),
 ]

@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 import { Noto_Sans_Georgian } from "next/font/google";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 const georgian = Noto_Sans_Georgian({
@@ -21,11 +19,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="ka" className={`${georgian.variable} h-full antialiased`}>
-      <body className="flex min-h-full flex-col font-sans text-[15px]">
-        <SiteHeader />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
-      </body>
+      <body className="flex min-h-full flex-col font-sans text-[15px]">{children}</body>
     </html>
   );
 }

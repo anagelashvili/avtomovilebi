@@ -23,3 +23,9 @@ body {
   background: var(--color-page);
   color: var(--color-ink);
 }
+
+/* Keeps `sr-only` labels inside a scrolling table from widening the page
+   (absolute elements otherwise position against the whole document). */
+.overflow-x-auto {
+  position: relative;
+}
