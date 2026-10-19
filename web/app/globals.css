@@ -1,0 +1,25 @@
+@import "tailwindcss";
+
+/* Colours from the design mockup. */
+@theme inline {
+  --color-ink: #1e1b2e;
+  --color-muted: #6b6580;
+  --color-page: #f8f6fc;
+  --color-line: #e6e0f2;
+  --color-field: #d6cdea;
+  --color-brand: #6a1bd1;
+  --color-brand-dark: #4b2a86;
+  --color-brand-soft: #f1ecf8;
+  --color-brand-tint: #e1d4f7;
+  --color-sun: #f5b800;
+  --color-sun-soft: #fff3bf;
+  --color-sun-ink: #5c4600;
+  --color-footer: #1e1b2e;
+  --color-footer-text: #d6cdea;
+  --font-sans: var(--font-georgian), system-ui, sans-serif;
+}
+
+body {
+  background: var(--color-page);
+  color: var(--color-ink);
+}

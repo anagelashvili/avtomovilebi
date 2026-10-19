@@ -1,0 +1,17 @@
+# Python / Django
+__pycache__/
+*.pyc
+.venv/
+api/db.sqlite3
+api/media/
+api/staticfiles/
+.env
+
+# Node / Next.js
+node_modules/
+.next/
+.vercel/
+
+# Office temp files
+~$*
+.demo-logins.txt
