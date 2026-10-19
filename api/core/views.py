@@ -14,7 +14,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .excel_import import ImportFileError, import_cars, template_workbook
-from .models import Car, CarPhoto
+from .models import Car, CarPhoto, User
 from .permissions import IsDealer
 from .serializers import CarPhotoSerializer, CarSerializer, MeSerializer
 
@@ -43,11 +43,11 @@ class LoginView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        user = authenticate(
-            request,
-            username=request.data.get("username", ""),
-            password=request.data.get("password", ""),
-        )
+        username = str(request.data.get("username", "")).strip()
+        if "@" in username:  # people may type their email instead
+            match = User.objects.filter(email__iexact=username).first()
+            username = match.username if match else username
+        user = authenticate(request, username=username, password=request.data.get("password", ""))
         if user is None:
             return Response(
                 {"detail": "მომხმარებელი ან პაროლი არასწორია."},

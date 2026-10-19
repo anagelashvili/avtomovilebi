@@ -3,10 +3,12 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { api, homeFor, type Me } from "@/lib/client";
+import { keepValues } from "@/lib/forms";
 
 export function LoginForm() {
   const router = useRouter();
-  const next = useSearchParams().get("next");
+  const params = useSearchParams();
+  const next = params.get("next");
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
@@ -26,10 +28,13 @@ export function LoginForm() {
   }
 
   return (
-    <form action={submit} className="flex flex-col gap-3">
+    <form onSubmit={keepValues(submit)} className="flex flex-col gap-3">
+      {params.get("password") === "set" && (
+        <p role="status" className="rounded-md bg-[#d9f3e1] px-3 py-2 text-sm text-[#17653a]">პაროლი დაყენებულია. შედით ახალი პაროლით.</p>
+      )}
       <label className="flex flex-col gap-1 font-semibold">
-        მომხმარებელი
-        <input name="username" required autoComplete="username" className="min-h-11 rounded-md border border-field px-3 font-normal" />
+        ელ-ფოსტა ან მომხმარებელი
+        <input name="username" required autoComplete="username" defaultValue={params.get("user") ?? ""} className="min-h-11 rounded-md border border-field px-3 font-normal" />
       </label>
       <label className="flex flex-col gap-1 font-semibold">
         პაროლი

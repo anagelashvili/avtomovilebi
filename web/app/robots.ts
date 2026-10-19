@@ -7,7 +7,7 @@ export default function robots(): MetadataRoute.Robots {
       userAgent: "*",
       allow: "/",
       // Panels and the login are for dealers and companies, not for search.
-      disallow: ["/api/", "/login", "/dealer/", "/leasing/", "/overview"],
+      disallow: ["/api/", "/login", "/password/", "/dealer/", "/leasing/", "/members", "/overview"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
   };

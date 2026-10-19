@@ -16,7 +16,7 @@ async function allCars() {
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   "use cache";
   cacheLife("hours");
-  const pages = ["", "/cars", "/companies", "/dealers", "/faq", "/contact"].map((path) => ({
+  const pages = ["", "/cars", "/companies", "/dealers", "/partner", "/faq", "/contact"].map((path) => ({
     url: `${SITE_URL}${path}`,
     changeFrequency: "daily" as const,
   }));

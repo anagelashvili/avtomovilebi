@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { btn, btn2, card, ErrorNote, input, Pill, STATUS_COLOR } from "@/components/ui";
 import { api } from "@/lib/client";
+import { keepValues } from "@/lib/forms";
 import { gel } from "@/lib/format";
 import { dateTime, type AppDetail } from "@/lib/leasing";
 
@@ -90,7 +91,7 @@ export default function ApplicationPage() {
             <span className="text-sm text-muted">კოდი შეყვანილია {dateTime(app.opened_at)}</span>
           </div>
           {canSign && (
-            <form action={(f) => change("signed", f)} className="flex flex-col gap-2">
+            <form onSubmit={keepValues((f) => change("signed", f))} className="flex flex-col gap-2">
               <label className="flex flex-col gap-1">
                 ხელშეკრულების ნომერი
                 <input name="contract_number" required placeholder="№" className={input} />

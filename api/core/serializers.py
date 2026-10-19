@@ -17,7 +17,7 @@ class MeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ["id", "username", "first_name", "last_name", "role", "is_staff", "organization"]
+        fields = ["id", "username", "email", "first_name", "last_name", "role", "is_staff", "organization"]
 
 
 class CarPhotoSerializer(serializers.ModelSerializer):

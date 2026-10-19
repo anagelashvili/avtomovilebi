@@ -15,8 +15,8 @@ export default function DealersPage() {
         <li>ფოტოიანი მანქანები გამოჩნდება საიტზე.</li>
       </ol>
       <div className="flex flex-wrap gap-2.5">
-        <Link href="/login" className="inline-flex min-h-11 items-center rounded-md bg-brand px-5 font-bold text-white hover:bg-brand-dark">შესვლა</Link>
-        <Link href="/contact" className="inline-flex min-h-11 items-center rounded-md border-[1.5px] border-brand px-5 font-semibold text-brand">დაგვიკავშირდით</Link>
+        <Link href="/partner" className="inline-flex min-h-11 items-center rounded-md bg-brand px-5 font-bold text-white hover:bg-brand-dark">გახდით პარტნიორი</Link>
+        <Link href="/login" className="inline-flex min-h-11 items-center rounded-md border-[1.5px] border-brand px-5 font-semibold text-brand">უკვე პარტნიორი ხართ? შესვლა</Link>
       </div>
     </TextPage>
   );

@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { startTransition, useActionState } from "react";
 import { gel } from "@/lib/format";
+import { keepValues } from "@/lib/forms";
 import { submitApplication, type ApplyState } from "./actions";
 import { FORM_ID } from "./form-id";
 
@@ -29,7 +30,12 @@ export function ApplyForm({ carId }: { carId: number }) {
   const message = state.status === "error" ? state.message ?? err.car ?? err.offer ?? err.non_field_errors : undefined;
 
   return (
-    <form id={FORM_ID} action={action} className="flex flex-col gap-2.5 rounded-lg border border-line bg-white p-5">
+    <form
+      id={FORM_ID}
+      action={action} // still works before JavaScript loads
+      onSubmit={keepValues((data) => startTransition(() => action(data)))}
+      className="flex flex-col gap-2.5 rounded-lg border border-line bg-white p-5"
+    >
       <b className="text-[17px]">გაგზავნე განაცხადი</b>
       <p className="text-sm text-muted">აირჩიეთ შეთავაზება ცხრილში და შეავსეთ ფორმა.</p>
       <input type="hidden" name="car" value={carId} />

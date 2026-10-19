@@ -53,6 +53,8 @@ export async function api<T = unknown>(
 export type Me = {
   id: number;
   username: string;
+  email: string;
+  role: "owner" | "manager";
   first_name: string;
   last_name: string;
   is_staff: boolean;

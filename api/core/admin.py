@@ -1,10 +1,38 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
+from django.core.exceptions import ValidationError
+from django.contrib import messages
+
+from .accounts import approve_partner_request
 from .invoicing import generate_invoices, previous_month
 from .models import (
-    Application, Car, CarPhoto, Invoice, InvoiceItem, LeaseOffer, Organization, StatusChange, User,
+    Application, Car, CarPhoto, Invoice, InvoiceItem, LeaseOffer, Organization, PartnerRequest,
+    StatusChange, User,
 )
+
+
+@admin.register(PartnerRequest)
+class PartnerRequestAdmin(admin.ModelAdmin):
+    list_display = ["company_name", "kind", "tax_id", "contact_name", "phone", "email", "status", "created_at"]
+    list_filter = ["status", "kind"]
+    search_fields = ["company_name", "tax_id", "email"]
+    readonly_fields = ["status", "organization", "created_at"]
+    actions = ["approve", "reject"]
+
+    @admin.action(description="დამტკიცება: ანგარიშის შექმნა და მოწვევის გაგზავნა")
+    def approve(self, request, queryset):
+        for req in queryset:
+            try:
+                org = approve_partner_request(req)
+                self.message_user(request, f"{org}: ანგარიში შეიქმნა, მოწვევა გაიგზავნა {req.email}-ზე.")
+            except ValidationError as exc:
+                self.message_user(request, exc.messages[0], level=messages.ERROR)
+
+    @admin.action(description="უარყოფა")
+    def reject(self, request, queryset):
+        n = queryset.filter(status=PartnerRequest.Status.NEW).update(status=PartnerRequest.Status.REJECTED)
+        self.message_user(request, f"უარყოფილია {n} მოთხოვნა.")
 
 
 @admin.register(Organization)

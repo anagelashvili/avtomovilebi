@@ -25,6 +25,12 @@ const SECTIONS = [
     ],
   },
   {
+    // A company owner invites and manages their own staff.
+    prefix: "/members",
+    allowed: (me: Me) => me.role === "owner" && !!me.organization,
+    nav: [{ href: "/members", label: "თანამშრომლები" }],
+  },
+  {
     prefix: "/overview",
     allowed: (me: Me) => me.is_staff,
     nav: [{ href: "/overview", label: "მიმოხილვა" }],

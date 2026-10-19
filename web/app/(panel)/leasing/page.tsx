@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { card, ErrorNote, input, Pill, STATUS_COLOR, td, th } from "@/components/ui";
 import { api } from "@/lib/client";
+import { keepValues } from "@/lib/forms";
 import { shortDate } from "@/lib/dealer";
 import type { AppDetail, AppRow } from "@/lib/leasing";
 
@@ -43,7 +44,7 @@ export default function LeasingHome() {
 
   return (
     <div className="flex flex-col gap-5">
-      <form action={open} className="flex flex-wrap items-center gap-3 rounded-lg bg-[linear-gradient(100deg,#f5a800,#ffe81f)] p-5">
+      <form onSubmit={keepValues(open)} className="flex flex-wrap items-center gap-3 rounded-lg bg-[linear-gradient(100deg,#f5a800,#ffe81f)] p-5">
         <label htmlFor="code" className="text-[17px] font-bold">კლიენტი მოვიდა? შეიყვანეთ კოდი:</label>
         <input id="code" name="code" required placeholder="GL-00000" autoComplete="off" className={`${input} max-w-[260px]`} />
         <button disabled={busy} className="min-h-11 rounded-md bg-ink px-5 font-bold text-white disabled:opacity-60">გახსნა</button>

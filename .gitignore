@@ -4,6 +4,7 @@ __pycache__/
 .venv/
 api/db.sqlite3
 api/media/
+api/sent-emails/
 api/staticfiles/
 .env
 

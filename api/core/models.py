@@ -77,6 +77,47 @@ class User(AbstractUser):
     def is_leasing(self):
         return bool(self.organization and self.organization.is_leasing)
 
+    @property
+    def is_owner(self):
+        return bool(self.organization_id and self.role == self.Role.OWNER)
+
+
+class PartnerRequest(models.Model):
+    """A dealer or leasing company asking to join. Our team approves it in the
+    admin once the commission contract is signed (plan §9); approval creates
+    the organisation and emails the contact a link to set a password."""
+
+    class Kind(models.TextChoices):
+        DEALER = "dealer", "დილერი"
+        LEASING = "leasing", "ლიზინგ კომპანია"
+        BOTH = "both", "ორივე"
+
+    class Status(models.TextChoices):
+        NEW = "new", "ახალი"
+        APPROVED = "approved", "დამტკიცებული"
+        REJECTED = "rejected", "უარყოფილი"
+
+    company_name = models.CharField("კომპანია", max_length=200)
+    kind = models.CharField("ტიპი", max_length=10, choices=Kind.choices)
+    tax_id = models.CharField("საიდენტიფიკაციო კოდი", max_length=20)
+    contact_name = models.CharField("საკონტაქტო პირი", max_length=120)
+    phone = models.CharField("ტელეფონი", max_length=40)
+    email = models.EmailField("ელ-ფოსტა")
+    message = models.TextField("შეტყობინება", blank=True)
+    status = models.CharField("სტატუსი", max_length=10, choices=Status.choices, default=Status.NEW)
+    organization = models.ForeignKey(
+        Organization, verbose_name="შექმნილი ორგანიზაცია", null=True, blank=True, on_delete=models.SET_NULL
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "პარტნიორობის მოთხოვნა"
+        verbose_name_plural = "პარტნიორობის მოთხოვნები"
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return self.company_name
+
 
 class Car(models.Model):
     class Fuel(models.TextChoices):

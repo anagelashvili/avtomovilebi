@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from . import leasing, public, views
+from . import accounts, leasing, public, views
 
 router = DefaultRouter()
 router.register("dealer/cars", views.DealerCarViewSet, basename="dealer-car")
@@ -16,6 +16,12 @@ urlpatterns = [
     path("auth/login/", views.LoginView.as_view()),
     path("auth/logout/", views.LogoutView.as_view()),
     path("auth/me/", views.MeView.as_view()),
+    path("auth/password/forgot/", accounts.PasswordForgot.as_view()),
+    path("auth/password/set/", accounts.PasswordSet.as_view()),
+    path("public/partner-requests/", accounts.PartnerRequestCreate.as_view()),
+    path("org/members/", accounts.OrgMembers.as_view()),
+    path("org/members/<int:pk>/active/", accounts.OrgMemberActive.as_view()),
+    path("org/members/<int:pk>/reinvite/", accounts.OrgMemberReinvite.as_view()),
     path("dealer/import/", views.ExcelImportView.as_view()),
     path("dealer/import/template/", views.ExcelTemplateView.as_view()),
     path("leasing/applications/", leasing.LeasingApplications.as_view()),

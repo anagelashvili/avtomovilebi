@@ -411,6 +411,91 @@ class LeasingTests(TestCase):
         self.assertEqual([s["code"] for s in data["suspicious"]], [self.app.code])
 
 
+class AccountTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        self.client = APIClient()
+
+    def request_partner(self, **kw):
+        data = dict(company_name="შპს ავტო", kind="dealer", tax_id="404123456", contact_name="ნიკა",
+                    phone="555111222", email="Nika@Example.com", message="")
+        data.update(kw)
+        return self.client.post("/api/public/partner-requests/", data, format="json")
+
+    def link_parts(self, body):
+        import re
+        m = re.search(r"/password/set\?uid=([^&\s]+)&token=(\S+)", body)
+        return m.group(1), m.group(2)
+
+    def test_partner_request_validation_and_honeypot(self):
+        self.assertEqual(self.request_partner(tax_id="12").status_code, 400)
+        self.assertEqual(self.request_partner(website="x").status_code, 400)
+        self.assertEqual(self.request_partner().status_code, 201)
+
+    @override_settings(TEAM_EMAIL="team@example.com")
+    def test_approval_creates_org_and_owner_who_sets_own_password(self):
+        from .accounts import approve_partner_request
+        from .models import PartnerRequest
+        with self.captureOnCommitCallbacks(execute=True):
+            self.request_partner()
+        self.assertEqual(mail.outbox[-1].to, ["team@example.com"])
+        req = PartnerRequest.objects.get()
+        with self.captureOnCommitCallbacks(execute=True):
+            org = approve_partner_request(req)
+        self.assertTrue(org.is_dealer and not org.is_leasing)
+        owner = User.objects.get(organization=org)
+        self.assertEqual((owner.role, owner.has_usable_password()), ("owner", False))
+        with self.assertRaises(ValidationError):
+            approve_partner_request(req)  # only once
+
+        uid, token = self.link_parts(mail.outbox[-1].body)
+        weak = self.client.post("/api/auth/password/set/", {"uid": uid, "token": token, "password": "123"}, format="json")
+        self.assertEqual(weak.status_code, 400)
+        ok = self.client.post("/api/auth/password/set/", {"uid": uid, "token": token, "password": "ahali-paroli-2026"}, format="json")
+        self.assertEqual(ok.status_code, 200)
+        again = self.client.post("/api/auth/password/set/", {"uid": uid, "token": token, "password": "sxva-paroli-2026"}, format="json")
+        self.assertEqual(again.status_code, 400)  # links work once
+        r = self.client.post("/api/auth/login/", {"username": "nika@example.com", "password": "ahali-paroli-2026"}, format="json")
+        self.assertEqual(r.status_code, 200)  # email works as login
+
+    def test_forgot_password_does_not_reveal_accounts(self):
+        User.objects.create_user("u", email="u@example.com", password="old-paroli-123")
+        a = self.client.post("/api/auth/password/forgot/", {"email": "u@example.com"}, format="json")
+        b = self.client.post("/api/auth/password/forgot/", {"email": "nobody@example.com"}, format="json")
+        self.assertEqual((a.status_code, a.json()), (b.status_code, b.json()))
+        self.assertEqual(len(mail.outbox), 1)
+
+    def test_failed_invite_email_does_not_break_the_invite(self):
+        from unittest import mock
+        org = Organization.objects.create(name="L", code="l", is_leasing=True)
+        c = APIClient()
+        c.force_authenticate(User.objects.create_user("o", organization=org, role="owner"))
+        with mock.patch("core.accounts.send_invite", side_effect=OSError("smtp down")), \
+                self.assertLogs("core.accounts", "ERROR"), self.captureOnCommitCallbacks(execute=True):
+            r = c.post("/api/org/members/", {"email": "a@example.com", "first_name": "ა"}, format="json")
+        self.assertEqual(r.status_code, 201)
+        self.assertTrue(User.objects.filter(email="a@example.com").exists())
+
+    def test_owner_invites_and_manages_staff(self):
+        org = Organization.objects.create(name="L", code="l", is_leasing=True)
+        owner = User.objects.create_user("o", organization=org, role="owner")
+        manager = User.objects.create_user("m", organization=org)
+        other = User.objects.create_user("x", organization=Organization.objects.create(name="O", code="o"))
+        c = APIClient()
+        c.force_authenticate(manager)
+        self.assertEqual(c.get("/api/org/members/").status_code, 403)  # managers can't
+        c.force_authenticate(owner)
+        with self.captureOnCommitCallbacks(execute=True):
+            r = c.post("/api/org/members/", {"email": "New@Example.com", "first_name": "ანა"}, format="json")
+        self.assertEqual(r.status_code, 201)
+        self.assertEqual(User.objects.get(email="new@example.com").organization, org)
+        self.assertIn("/password/set?uid=", mail.outbox[-1].body)
+        self.assertEqual(c.post("/api/org/members/", {"email": "new@example.com", "first_name": "ა"}, format="json").status_code, 400)
+        self.assertFalse(c.post(f"/api/org/members/{manager.id}/active/", {"is_active": False}, format="json").json()["is_active"])
+        self.assertEqual(c.post(f"/api/org/members/{other.id}/active/", {"is_active": False}, format="json").status_code, 404)
+        self.assertEqual(c.post(f"/api/org/members/{owner.id}/active/", {"is_active": False}, format="json").status_code, 404)
+
+
 class ReminderTests(TestCase):
     def test_morning_email_goes_to_dealer_users(self):
         dealer = Organization.objects.create(name="D", code="d", is_dealer=True)

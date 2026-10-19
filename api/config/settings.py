@@ -166,6 +166,7 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "apply": os.environ.get("THROTTLE_APPLY", "5/hour"),
         "open_code": os.environ.get("THROTTLE_OPEN_CODE", "30/hour"),
+        "public_form": os.environ.get("THROTTLE_PUBLIC_FORM", "10/hour"),
     },
 }
 
@@ -178,12 +179,19 @@ INVOICE_BANK_DETAILS = os.environ.get(
     "INVOICE_BANK_DETAILS", "[კომპანიის სახელი] · [ს/კ] · [ბანკი] · [IBAN]"
 )
 SITE_URL = os.environ.get("SITE_URL", "http://localhost:3000")
+# New partner requests are emailed here (leave empty to only see them in the admin).
+TEAM_EMAIL = os.environ.get("TEAM_EMAIL", "")
+# Invite and password-reset links stay valid this long.
+PASSWORD_RESET_TIMEOUT = 7 * 24 * 3600
 
+# In development emails are saved as files in api/sent-emails/ (the Windows
+# console can't print Georgian text, and files are easier to read anyway).
 EMAIL_BACKEND = os.environ.get(
     "DJANGO_EMAIL_BACKEND",
-    "django.core.mail.backends.console.EmailBackend" if DEBUG
+    "django.core.mail.backends.filebased.EmailBackend" if DEBUG
     else "django.core.mail.backends.smtp.EmailBackend",
 )
+EMAIL_FILE_PATH = BASE_DIR / "sent-emails"
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "")
 EMAIL_PORT = int(os.environ.get("EMAIL_PORT", "587"))
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
