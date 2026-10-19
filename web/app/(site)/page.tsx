@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CarTile } from "@/components/car-cards";
+import { CarTile, photoZoom } from "@/components/car-cards";
 import { getCars, getFilters, type CarCard } from "@/lib/api";
 import { gel, n } from "@/lib/format";
 
@@ -82,9 +82,9 @@ export default async function Home() {
             {BODIES.map((b) => {
               const photo = cars.find((c) => c.body === b.value && c.photo)?.photo;
               return (
-                <Link key={b.value} href={`/cars?body=${b.value}`} className="overflow-hidden rounded-lg border border-line bg-white hover:shadow-[0_6px_18px_rgba(30,27,46,.12)]">
-                  <div className="relative h-[120px] bg-[#ece6f6]">
-                    {photo && <Image src={photo} alt="" fill sizes="300px" className="object-cover" />}
+                <Link key={b.value} href={`/cars?body=${b.value}`} className="group overflow-hidden rounded-lg border border-line bg-white transition-shadow hover:shadow-[0_6px_18px_rgba(30,27,46,.12)]">
+                  <div className="relative h-[120px] overflow-hidden bg-[#ece6f6]">
+                    {photo && <Image src={photo} alt="" fill sizes="300px" className={photoZoom} />}
                   </div>
                   <div className="px-3 py-2.5 font-semibold">{b.label}</div>
                 </Link>
@@ -137,6 +137,13 @@ export default async function Home() {
   );
 }
 
+// Hero photo tiles: the whole tile grows and comes forward (over its
+// neighbours) on hover or keyboard focus; skipped for people who ask their
+// system for less motion.
+const tile =
+  "group relative overflow-hidden rounded-[14px] transition duration-300 ease-out hover:z-10 hover:shadow-[0_18px_40px_rgba(30,27,46,.4)] focus-visible:z-10 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ink motion-safe:hover:scale-[1.06] motion-safe:focus-visible:scale-[1.06]";
+const zoom = "object-cover";
+
 function Hero({ cars }: { cars: CarCard[] }) {
   const withPhotos = cars.filter((c) => c.photo).slice(0, 5);
   const [main, ...rest] = withPhotos;
@@ -147,8 +154,10 @@ function Hero({ cars }: { cars: CarCard[] }) {
           <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl">იპოვე მანქანა და ლიზინგი ერთ ადგილას</h1>
           <ul className="flex flex-col gap-3.5 text-lg font-bold sm:text-xl">
             {["ავტომობილები ყველა ლიზინგ კომპანიისგან", "შეადარე შეთავაზებები ერთ ადგილას", "ერთი განაცხადი და ერთი კოდი"].map((t) => (
-              <li key={t} className="flex items-center gap-4">
-                <span className="size-[22px] flex-none rounded-full bg-white" aria-hidden="true" />
+              <li key={t} className="flex items-start gap-4">
+                <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 flex-none sm:mt-1">
+                  <path d="M4 12.5l5 5L20 6.5" />
+                </svg>
                 {t}
               </li>
             ))}
@@ -156,15 +165,19 @@ function Hero({ cars }: { cars: CarCard[] }) {
         </div>
         {main && (
           <div className="grid h-[400px] grid-cols-[2fr_1fr_1fr] grid-rows-2 gap-2.5 max-sm:h-[260px] max-sm:grid-cols-1 max-sm:grid-rows-1">
-            <Link href={`/cars/${main.id}`} className="relative row-span-2 overflow-hidden rounded-[14px]">
-              <Image src={main.photo!} alt={`${main.make} ${main.model}`} fill priority sizes="(max-width: 640px) 100vw, 500px" className="object-cover" />
-              <span className="absolute bottom-3.5 left-3.5 rounded-full bg-white px-4 py-2 text-sm font-bold">
+            <Link href={`/cars/${main.id}`} className={`${tile} row-span-2`}>
+              <Image src={main.photo!} alt={`${main.make} ${main.model}`} fill priority sizes="(max-width: 640px) 100vw, 500px" className={zoom} />
+              <span className="absolute bottom-3.5 left-3.5 rounded-full bg-white px-4 py-2 text-sm font-bold transition-colors duration-300 group-hover:bg-ink group-hover:text-white">
                 {main.make} {main.model} · თვიურად {gel(main.monthly_from)}-დან
               </span>
             </Link>
             {rest.map((c) => (
-              <Link key={c.id} href={`/cars/${c.id}`} className="relative overflow-hidden rounded-[14px] max-sm:hidden">
-                <Image src={c.photo!} alt={`${c.make} ${c.model}`} fill sizes="250px" className="object-cover" />
+              <Link key={c.id} href={`/cars/${c.id}`} className={`${tile} max-sm:hidden`}>
+                <Image src={c.photo!} alt={`${c.make} ${c.model}`} fill sizes="250px" className={zoom} />
+                {/* Small tiles have no label; show one when hovered. */}
+                <span className="absolute inset-x-2 bottom-2 truncate rounded-full bg-white/95 px-3 py-1 text-center text-xs font-bold opacity-0 transition duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 motion-safe:translate-y-2 motion-safe:group-hover:translate-y-0 motion-safe:group-focus-visible:translate-y-0">
+                  {c.make} {c.model} · {gel(c.monthly_from)}/თვე
+                </span>
               </Link>
             ))}
           </div>

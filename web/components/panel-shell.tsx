@@ -83,7 +83,7 @@ function PanelHeader({ me, pathname, onLogout }: { me: Me; pathname: string; onL
       <header className="flex flex-wrap items-center justify-between gap-3 border-b border-line bg-white px-4 py-3.5 sm:px-10 print:hidden">
         <span className="flex items-center gap-2.5">
           <span className="inline-block size-[34px] rounded-md bg-[#ffc800]" aria-hidden="true" />
-          <b className="text-[19px]">{me.organization?.name ?? "[საიტის სახელი] · ადმინი"}</b>
+          <b className="text-[19px]">{me.organization?.name ?? "avtomobilebi · ადმინი"}</b>
         </span>
         <span className="flex items-center gap-4 text-[#4a4560]">
           {me.first_name || me.username}

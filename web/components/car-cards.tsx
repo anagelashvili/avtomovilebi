@@ -9,11 +9,16 @@ function specs(car: CarCard) {
     .join(" · ");
 }
 
+// The photo grows inside its frame when the card (a `group`) is hovered or
+// focused; skipped for people who ask their system for less motion.
+export const photoZoom =
+  "object-cover transition-transform duration-500 ease-out motion-safe:group-hover:scale-110 motion-safe:group-focus-within:scale-110";
+
 function Photo({ car, sizes, className }: { car: CarCard; sizes: string; className: string }) {
   return (
-    <div className={`relative bg-[#ece6f6] ${className}`}>
+    <div className={`relative overflow-hidden bg-[#ece6f6] ${className}`}>
       {car.photo && (
-        <Image src={car.photo} alt={`${car.make} ${car.model}`} fill sizes={sizes} className="object-cover" />
+        <Image src={car.photo} alt={`${car.make} ${car.model}`} fill sizes={sizes} className={photoZoom} />
       )}
     </div>
   );
@@ -22,7 +27,7 @@ function Photo({ car, sizes, className }: { car: CarCard; sizes: string; classNa
 /** Catalog row: photo · details · price column. */
 export function CarRow({ car }: { car: CarCard }) {
   return (
-    <article className="flex flex-wrap overflow-hidden rounded-lg border border-line bg-white hover:shadow-[0_6px_18px_rgba(30,27,46,.12)]">
+    <article className="group flex flex-wrap overflow-hidden rounded-lg border border-line bg-white transition-shadow hover:shadow-[0_6px_18px_rgba(30,27,46,.12)]">
       <Photo car={car} sizes="280px" className="h-[190px] w-full sm:w-[280px] sm:flex-none" />
       <div className="flex min-w-[240px] flex-1 flex-col gap-1.5 p-4">
         <Link href={`/cars/${car.id}`} className="text-lg font-bold hover:text-brand">
@@ -62,7 +67,7 @@ export function CarTile({ car }: { car: CarCard }) {
   return (
     <Link
       href={`/cars/${car.id}`}
-      className="flex flex-col overflow-hidden rounded-lg border border-line bg-white hover:shadow-[0_6px_18px_rgba(30,27,46,.12)]"
+      className="group flex flex-col overflow-hidden rounded-lg border border-line bg-white transition-shadow hover:shadow-[0_6px_18px_rgba(30,27,46,.12)]"
     >
       <Photo car={car} sizes="(max-width: 640px) 100vw, 300px" className="h-[170px]" />
       <div className="flex flex-col gap-1.5 p-3.5">

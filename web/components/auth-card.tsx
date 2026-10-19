@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "./logo";
 
 /** Centered card used by login, password and partner-request pages. */
 export function AuthCard({ title, subtitle, children, wide = false }: {
@@ -10,9 +11,8 @@ export function AuthCard({ title, subtitle, children, wide = false }: {
   return (
     <main className="flex flex-1 items-center justify-center bg-page px-4 py-12">
       <div className={`w-full ${wide ? "max-w-xl" : "max-w-sm"}`}>
-        <Link href="/" className="mb-6 flex items-center justify-center gap-3">
-          <span className="inline-block size-10 rounded-lg bg-sun" aria-hidden="true" />
-          <b className="text-xl">[ლოგო]</b>
+        <Link href="/" className="mb-6 flex justify-center" aria-label="მთავარი გვერდი">
+          <Logo size={28} />
         </Link>
         <div className="rounded-lg border border-line bg-white p-6">
           <h1 className="mb-1 text-2xl font-bold">{title}</h1>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "./logo";
 
 const COLUMNS = [
   {
@@ -55,9 +56,8 @@ export function SiteFooter() {
     <footer className="bg-footer text-footer-text">
       <div className="mx-auto grid max-w-[1240px] grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-8 px-6 pb-8 pt-12">
         <div className="flex flex-col gap-3.5">
-          <Link href="/" className="flex items-center gap-3 text-white">
-            <span className="inline-block size-10 rounded-lg bg-sun" aria-hidden="true" />
-            <b className="text-lg">[საიტის სახელი]</b>
+          <Link href="/" className="flex min-h-11 items-center" aria-label="მთავარი გვერდი">
+            <Logo size={24} dark />
           </Link>
           <p className="leading-relaxed">
             მანქანები ლიზინგით — შეადარე ლიზინგ კომპანიების შეთავაზებები ერთ ადგილას.
@@ -97,7 +97,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-[#36314a]">
         <div className="mx-auto flex max-w-[1240px] flex-wrap justify-between gap-3 px-6 py-[18px] text-sm">
-          <span>© 2026 [საიტის სახელი]. ყველა უფლება დაცულია.</span>
+          <span>© 2026 avtomobilebi.ge. ყველა უფლება დაცულია.</span>
           <div className="flex flex-wrap gap-5">
             <Link href="/privacy" className={linkClass}>კონფიდენციალურობა</Link>
             <Link href="/terms" className={linkClass}>წესები და პირობები</Link>
