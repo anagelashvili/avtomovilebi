@@ -1,8 +1,7 @@
-const number = new Intl.NumberFormat("ka-GE");
-
-/** 98000 → "98 000" */
+/** 98000 → "98 000", 3504 → "3 504" (the design groups 4-digit numbers too,
+ * which Intl's ka-GE format doesn't). Uses a no-break space. */
 export function n(value: number) {
-  return number.format(value);
+  return String(Math.round(value)).replace(/\B(?=(\d{3})+(?!\d))/g, " ");
 }
 
 export function gel(value: number) {
