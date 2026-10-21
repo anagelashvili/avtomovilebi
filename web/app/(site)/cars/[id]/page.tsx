@@ -46,7 +46,7 @@ async function CarView({ params }: { params: Promise<{ id: string }> }) {
     ["საწვავი", car.fuel_label],
     ["ძრავა", car.engine && `${car.engine}l`],
     ["გადაცემათა კოლოფი", car.transmission_label],
-    ["გარბენი", `${n(car.mileage_km)} კმ`],
+    ["გარბენი", car.mileage_km ? `${n(car.mileage_km)} კმ` : ""],
     ["ქალაქი", car.city],
   ].filter(([, v]) => v);
 
@@ -60,6 +60,11 @@ async function CarView({ params }: { params: Promise<{ id: string }> }) {
         <div className="flex min-w-0 flex-col gap-3.5">
           <div className="relative h-[260px] overflow-hidden rounded-lg border border-line bg-[#ece6f6] sm:h-[430px]">
             {car.photos[0] && <Image src={car.photos[0]} alt={name} fill priority quality={90} sizes="(max-width: 1024px) 100vw, 720px" className="object-cover" />}
+            {car.photo_credit && (
+              <span className="absolute bottom-0 right-0 max-w-full truncate rounded-tl-md bg-ink/60 px-2 py-0.5 text-[11px] text-white">
+                ფოტო: {car.photo_credit}
+              </span>
+            )}
           </div>
           {car.photos.length > 1 && (
             <div className="grid grid-cols-5 gap-2">

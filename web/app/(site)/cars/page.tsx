@@ -9,7 +9,7 @@ import { getCars, getFilters, type Filters } from "@/lib/api";
 export const metadata: Metadata = { title: "ლიზინგით ხელმისაწვდომი მანქანები" };
 
 const PAGE_SIZE = 12;
-const KEYS = ["make", "body", "fuel", "price_min", "price_max", "year_min", "year_max", "monthly_max", "company", "sort", "page"];
+const KEYS = ["make", "body", "fuel", "price_min", "price_max", "year_min", "year_max", "monthly_max", "company", "seller", "sort", "page"];
 
 type Params = Record<string, string | string[] | undefined>;
 

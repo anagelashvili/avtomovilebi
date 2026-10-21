@@ -1,25 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { TextPage } from "@/components/text-page";
-import { getFilters } from "@/lib/api";
+import { CompanyCard } from "@/components/company-card";
+import { getCompanies } from "@/lib/api";
 
 export const metadata: Metadata = { title: "ლიზინგ კომპანიები" };
 
 export default async function CompaniesPage() {
-  const { companies } = await getFilters();
+  const companies = await getCompanies();
   return (
-    <TextPage title="ლიზინგ კომპანიები">
-      <p>ჩვენს საიტზე შეთავაზებებს ეს კომპანიები აქვეყნებენ. აირჩიეთ კომპანია და ნახეთ მისი შეთავაზებით ხელმისაწვდომი მანქანები.</p>
-      <ul className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3.5">
-        {companies.map((c) => (
-          <li key={c.value}>
-            <Link href={`/cars?company=${c.value}`} className="block rounded-lg border border-line p-5 text-center font-semibold hover:border-brand hover:text-brand">
-              {c.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      {companies.length === 0 && <p className="text-muted">კომპანიები მალე დაემატება.</p>}
-    </TextPage>
+    <div className="mx-auto max-w-[1240px] px-6 pb-14 pt-6">
+      <nav aria-label="breadcrumb" className="mb-2 text-muted">
+        <Link href="/" className="hover:text-brand">მთავარი</Link> / ლიზინგ კომპანიები
+      </nav>
+      <h1 className="mb-2 text-[28px] font-bold">ლიზინგ კომპანიები</h1>
+      <p className="mb-6 text-muted">აირჩიეთ კომპანია და ნახეთ მისი მანქანები და შეთავაზებები.</p>
+      {companies.length ? (
+        <div className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-3.5">
+          {companies.map((c) => <CompanyCard key={c.code} company={c} />)}
+        </div>
+      ) : (
+        <p className="text-muted">კომპანიები მალე დაემატება.</p>
+      )}
+    </div>
   );
 }

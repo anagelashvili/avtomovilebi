@@ -34,6 +34,8 @@ export type CarDetail = CarCard & {
   body_label: string;
   description: string;
   photos: string[];
+  /** Author and licence of the main photo, when its licence asks for credit. */
+  photo_credit: string;
   offers: Offer[];
 };
 
@@ -68,6 +70,36 @@ export async function getCar(id: string): Promise<CarDetail | null> {
   cacheTag("cars", `car:${id}`);
   if (!/^\d+$/.test(id)) return null;
   return getJson<CarDetail>(`/api/public/cars/${id}/`);
+}
+
+export type Company = {
+  code: string;
+  name: string;
+  logo: string | null;
+  is_leasing: boolean;
+  is_dealer: boolean;
+  /** Cars the company sells itself. */
+  cars_count: number;
+  /** Leasing offers it gives on cars on the site. */
+  offers_count: number;
+  phone: string;
+  email: string;
+  address: string;
+};
+
+export async function getCompanies(): Promise<Company[]> {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("companies");
+  return (await getJson<Company[]>("/api/public/companies/"))!;
+}
+
+export async function getCompany(code: string): Promise<Company | null> {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("companies", `company:${code}`);
+  if (!/^[\w-]+$/.test(code)) return null;
+  return getJson<Company>(`/api/public/companies/${code}/`);
 }
 
 export async function getFilters(): Promise<Filters> {

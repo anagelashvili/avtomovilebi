@@ -17,3 +17,4 @@ node_modules/
 ~$*
 .demo-logins.txt
 .demo-code.txt
+api/demo-photos/

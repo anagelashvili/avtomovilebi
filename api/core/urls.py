@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from . import accounts, leasing, public, views
+from . import accounts, buyer, leasing, public, views
 
 router = DefaultRouter()
 router.register("dealer/cars", views.DealerCarViewSet, basename="dealer-car")
@@ -11,6 +11,8 @@ urlpatterns = [
     path("public/cars/", public.PublicCarList.as_view()),
     path("public/cars/<int:pk>/", public.PublicCarDetail.as_view()),
     path("public/filters/", public.PublicFilters.as_view()),
+    path("public/companies/", public.PublicCompanies.as_view()),
+    path("public/companies/<slug:code>/", public.PublicCompanyDetail.as_view()),
     path("public/applications/", public.PublicApplicationCreate.as_view()),
     path("auth/csrf/", views.CsrfView.as_view()),
     path("auth/login/", views.LoginView.as_view()),
@@ -19,6 +21,9 @@ urlpatterns = [
     path("auth/password/forgot/", accounts.PasswordForgot.as_view()),
     path("auth/password/set/", accounts.PasswordSet.as_view()),
     path("public/partner-requests/", accounts.PartnerRequestCreate.as_view()),
+    path("my/code/", buyer.RequestCode.as_view()),
+    path("my/verify/", buyer.VerifyCode.as_view()),
+    path("my/applications/", buyer.MyApplications.as_view()),
     path("org/members/", accounts.OrgMembers.as_view()),
     path("org/members/<int:pk>/active/", accounts.OrgMemberActive.as_view()),
     path("org/members/<int:pk>/reinvite/", accounts.OrgMemberReinvite.as_view()),

@@ -35,7 +35,7 @@ export function CarRow({ car }: { car: CarCard }) {
         </Link>
         <span className="text-muted">{specs(car)}</span>
         <span className="text-muted">
-          {n(car.mileage_km)} კმ · {car.city}
+          {car.mileage_km ? `${n(car.mileage_km)} კმ · ` : ""}{car.city}
         </span>
         <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
           {car.companies.map((c) => (
@@ -76,7 +76,7 @@ export function CarTile({ car }: { car: CarCard }) {
         </b>
         <span className="text-[13px] text-muted">{specs(car)}</span>
         <span className="text-[13px] text-muted">
-          {n(car.mileage_km)} კმ · {car.city}
+          {car.mileage_km ? `${n(car.mileage_km)} კმ · ` : ""}{car.city}
         </span>
         <div className="mt-1 text-xl font-bold">{gel(car.price_gel)}</div>
         <div className="rounded-md bg-sun-soft px-2.5 py-2 text-sm">

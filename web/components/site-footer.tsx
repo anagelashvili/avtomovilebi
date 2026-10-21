@@ -14,6 +14,7 @@ const COLUMNS = [
   {
     title: "სერვისი",
     links: [
+      { href: "/my", label: "ჩემი განაცხადები" },
       { href: "/companies", label: "ლიზინგ კომპანიები" },
       { href: "/#how", label: "როგორ მუშაობს" },
       { href: "/dealers", label: "დილერებისთვის" },

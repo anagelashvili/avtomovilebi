@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CarTile, photoZoom } from "@/components/car-cards";
+import { CompanyCard } from "@/components/company-card";
 import { Select } from "@/components/select";
-import { getCars, getFilters, type CarCard } from "@/lib/api";
+import { getCars, getCompanies, getFilters, type CarCard } from "@/lib/api";
 import { gel, n } from "@/lib/format";
 
 const MONTHLY = [300, 500, 800, 1200];
@@ -21,7 +22,7 @@ const STEPS = [
 const sectionTitle = "mb-4 text-2xl font-bold";
 
 export default async function Home() {
-  const [{ results: cars }, filters] = await Promise.all([getCars("sort=new"), getFilters()]);
+  const [{ results: cars }, filters, companies] = await Promise.all([getCars("sort=new"), getFilters(), getCompanies()]);
   const latest = cars.slice(0, 4);
 
   return (
@@ -97,13 +98,12 @@ export default async function Home() {
         </section>
 
         <section>
-          <h2 className={sectionTitle}>ლიზინგ პარტნიორები</h2>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-3.5">
-            {filters.companies.map((c) => (
-              <Link key={c.value} href={`/cars?company=${c.value}`} className="rounded-lg border border-line bg-white p-5 text-center font-semibold text-muted hover:text-brand">
-                {c.label}
-              </Link>
-            ))}
+          <div className="mb-4 flex items-baseline justify-between">
+            <h2 className="text-2xl font-bold">ლიზინგ პარტნიორები</h2>
+            <Link href="/companies" className="font-semibold text-brand">ყველა კომპანია →</Link>
+          </div>
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3.5">
+            {companies.slice(0, 8).map((c) => <CompanyCard key={c.code} company={c} />)}
           </div>
         </section>
 

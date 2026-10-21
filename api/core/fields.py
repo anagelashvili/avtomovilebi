@@ -1,3 +1,7 @@
+import hashlib
+import hmac
+import re
+
 from cryptography.fernet import Fernet, InvalidToken
 from django.conf import settings
 from django.db import models
@@ -5,6 +9,19 @@ from django.db import models
 
 def _fernet():
     return Fernet(settings.FIELD_ENCRYPTION_KEY.encode())
+
+
+def normalize_phone(raw):
+    """'+995 555 12-34-56' → '555123456'; None if it isn't a mobile number."""
+    digits = re.sub(r"[\s\-()]", "", raw or "")
+    digits = re.sub(r"^\+?995", "", digits)
+    return digits if re.fullmatch(r"5\d{8}", digits) else None
+
+
+def phone_lookup_hash(phone):
+    """One-way fingerprint of a phone number, so applications can be found by
+    phone even though the phone itself is stored encrypted."""
+    return hmac.new(settings.FIELD_ENCRYPTION_KEY.encode(), phone.encode(), hashlib.sha256).hexdigest()
 
 
 class EncryptedCharField(models.TextField):

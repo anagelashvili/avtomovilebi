@@ -281,6 +281,15 @@ class PublicApiTests(TestCase):
         self.assertEqual(self.ids("?sort=price_desc"), [self.vette.id, self.ix3.id])
         self.assertEqual(self.ids("?price_max=abc"), self.ids())  # junk is ignored
 
+    def test_companies_and_their_own_cars(self):
+        rows = {r["code"]: r for r in self.client.get("/api/public/companies/").json()}
+        self.assertEqual(rows["d"]["cars_count"], 2)  # dealer D sells ix3 + vette
+        self.assertEqual(rows["a"]["offers_count"], 2)
+        self.assertEqual(self.client.get("/api/public/companies/a/").json()["name"], "კომპანია A")
+        self.assertEqual(self.client.get("/api/public/companies/nope/").status_code, 404)
+        self.assertCountEqual(self.ids("?seller=d"), [self.ix3.id, self.vette.id])
+        self.assertEqual(self.ids("?seller=a"), [])
+
     def test_detail_hides_drafts(self):
         self.assertEqual(self.client.get(f"/api/public/cars/{self.ix3.id}/").json()["offers"][0]["monthly_gel"], 2900)
         self.assertEqual(self.client.get(f"/api/public/cars/{self.draft.id}/").status_code, 404)
@@ -501,6 +510,55 @@ class AccountTests(TestCase):
         self.assertFalse(c.post(f"/api/org/members/{manager.id}/active/", {"is_active": False}, format="json").json()["is_active"])
         self.assertEqual(c.post(f"/api/org/members/{other.id}/active/", {"is_active": False}, format="json").status_code, 404)
         self.assertEqual(c.post(f"/api/org/members/{owner.id}/active/", {"is_active": False}, format="json").status_code, 404)
+
+
+class BuyerPageTests(TestCase):
+    def setUp(self):
+        cache.clear()
+        dealer = Organization.objects.create(name="D", code="d", is_dealer=True)
+        leasing = Organization.objects.create(name="L", code="l", is_leasing=True)
+        car = make_car(dealer)
+        offer = LeaseOffer.objects.create(car=car, leasing_company=leasing, term_months=36, down_payment_gel=0, monthly_gel=2500)
+        base = dict(car=car, offer=offer, first_name="ა", last_name="ბ", personal_id="01001012345", consent_at=timezone.now())
+        self.mine = Application.objects.create(phone="555123456", **base)
+        self.other = Application.objects.create(phone="599000000", **base)
+        self.client = APIClient()
+
+    @override_settings(DEBUG=True)
+    def get_code(self, phone="+995 555 12 34 56"):
+        return self.client.post("/api/my/code/", {"phone": phone}, format="json").json()
+
+    def test_phone_code_unlocks_only_own_applications(self):
+        self.assertEqual(self.client.get("/api/my/applications/").status_code, 403)
+        with self.assertLogs("core.notify", "INFO"):
+            code = self.get_code()["debug_code"]
+        self.assertEqual(self.client.post("/api/my/verify/", {"phone": "555123456", "code": "000000" if code != "000000" else "111111"}, format="json").status_code, 400)
+        self.assertEqual(self.client.post("/api/my/verify/", {"phone": "555123456", "code": code}, format="json").status_code, 200)
+        rows = self.client.get("/api/my/applications/").json()
+        self.assertEqual([r["code"] for r in rows], [self.mine.code])
+        self.assertNotIn("personal_id", rows[0])
+        self.assertEqual(self.client.post("/api/my/verify/", {"phone": "555123456", "code": code}, format="json").status_code, 400)  # codes work once
+        self.client.delete("/api/my/applications/")
+        self.assertEqual(self.client.get("/api/my/applications/").status_code, 403)
+
+    def test_unknown_number_gets_same_answer_and_no_code(self):
+        known, unknown = self.get_code(), self.get_code("577 77 77 77")
+        self.assertEqual(known["detail"], unknown["detail"])
+        self.assertNotIn("debug_code", unknown)
+
+    def test_code_never_returned_outside_debug(self):
+        with self.assertLogs("core.notify", "INFO"):
+            r = self.client.post("/api/my/code/", {"phone": "555123456"}, format="json").json()
+        self.assertNotIn("debug_code", r)
+
+    @override_settings(DEBUG=True)
+    def test_too_many_wrong_codes_burn_the_code(self):
+        with self.assertLogs("core.notify", "INFO"):
+            code = self.client.post("/api/my/code/", {"phone": "555123456"}, format="json").json()["debug_code"]
+        wrong = "000000" if code != "000000" else "111111"
+        for _ in range(5):
+            self.client.post("/api/my/verify/", {"phone": "555123456", "code": wrong}, format="json")
+        self.assertEqual(self.client.post("/api/my/verify/", {"phone": "555123456", "code": code}, format="json").status_code, 400)
 
 
 class ReminderTests(TestCase):

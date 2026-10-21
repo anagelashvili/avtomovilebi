@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.db import models, transaction
 from django.utils import timezone
 
-from .fields import EncryptedCharField
+from .fields import EncryptedCharField, normalize_phone, phone_lookup_hash
 
 
 class Organization(models.Model):
@@ -24,6 +24,7 @@ class Organization(models.Model):
     phone = models.CharField("ტელეფონი", max_length=40, blank=True)
     email = models.EmailField("ელ-ფოსტა", blank=True)
     address = models.CharField("მისამართი", max_length=300, blank=True)
+    logo = models.ImageField("ლოგო", upload_to="logos/", blank=True)
 
     # How commission is charged is still open in the plan (§8), so it's set
     # per leasing company in the admin rather than hard-coded.
@@ -198,6 +199,10 @@ class CarPhoto(models.Model):
     car = models.ForeignKey(Car, on_delete=models.CASCADE, related_name="photos")
     image = models.ImageField(upload_to=car_photo_path)
     position = models.PositiveSmallIntegerField(default=0, help_text="0 = მთავარი ფოტო")
+    credit = models.CharField(
+        "ფოტოს ავტორი / ლიცენზია", max_length=300, blank=True,
+        help_text="Shown under the photo when its licence asks for credit.",
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -253,6 +258,8 @@ class Application(models.Model):
     last_name = models.CharField("გვარი", max_length=80)
     personal_id = EncryptedCharField("პირადი ნომერი")
     phone = EncryptedCharField("ტელეფონი")
+    # Lets a buyer find their applications by phone (see core/fields.py).
+    phone_hash = models.CharField(max_length=64, db_index=True, blank=True, editable=False)
     email = models.EmailField("ელ-ფოსტა", blank=True)
     consent_at = models.DateTimeField("თანხმობის დრო")
     status = models.CharField(
@@ -282,6 +289,10 @@ class Application(models.Model):
             self.code = self._new_code()
         if self.offer_id and not self.leasing_company_id:
             self.leasing_company_id = self.offer.leasing_company_id
+        phone = normalize_phone(self.phone)
+        self.phone_hash = phone_lookup_hash(phone) if phone else ""
+        if "update_fields" in kwargs and kwargs["update_fields"] is not None:
+            kwargs["update_fields"] = set(kwargs["update_fields"]) | {"phone_hash"}
         super().save(*args, **kwargs)
 
     @classmethod

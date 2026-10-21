@@ -89,6 +89,7 @@ function Sent({ state }: { state: Extract<ApplyState, { status: "sent" }> }) {
       <div className="text-sm">
         {state.car} · {state.company} · {gel(state.monthly_gel)}/თვე · {state.term_months} თვე
       </div>
+      <Link href="/my" className="text-sm font-semibold text-brand">განაცხადის სტატუსის ნახვა →</Link>
     </div>
   );
 }

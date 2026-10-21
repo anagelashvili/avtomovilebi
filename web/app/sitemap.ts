@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { cacheLife } from "next/cache";
-import { getCars, type CarCard } from "@/lib/api";
+import { getCars, getCompanies, type CarCard } from "@/lib/api";
 import { SITE_URL } from "@/lib/site";
 
 async function allCars() {
@@ -20,10 +20,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: `${SITE_URL}${path}`,
     changeFrequency: "daily" as const,
   }));
+  const companies = (await getCompanies()).map((c) => ({
+    url: `${SITE_URL}/companies/${c.code}`,
+    changeFrequency: "daily" as const,
+  }));
   const cars = (await allCars()).map((car) => ({
     url: `${SITE_URL}/cars/${car.id}`,
     lastModified: car.updated_at,
     images: car.photo ? [car.photo] : undefined,
   }));
-  return [...pages, ...cars];
+  return [...pages, ...companies, ...cars];
 }

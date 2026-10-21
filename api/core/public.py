@@ -5,7 +5,7 @@ import secrets
 
 from django.conf import settings
 from django.db import transaction
-from django.db.models import Min, Prefetch
+from django.db.models import Count, Min, Prefetch, Q
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import serializers, status
@@ -58,14 +58,19 @@ class CarCardSerializer(serializers.ModelSerializer):
 
 class CarDetailSerializer(CarCardSerializer):
     photos = serializers.SerializerMethodField()
+    photo_credit = serializers.SerializerMethodField()
     offers = OfferSerializer(many=True)
     body_label = serializers.CharField(source="get_body_display")
 
     class Meta(CarCardSerializer.Meta):
-        fields = CarCardSerializer.Meta.fields + ["body_label", "description", "photos", "offers"]
+        fields = CarCardSerializer.Meta.fields + ["body_label", "description", "photos", "photo_credit", "offers"]
 
     def get_photos(self, car):
         return [_photo_url(self.context["request"], p) for p in car.photos.all()]
+
+    def get_photo_credit(self, car):
+        photos = car.photos.all()
+        return photos[0].credit if photos else ""
 
 
 def public_cars():
@@ -122,6 +127,8 @@ class PublicCarList(APIView):
                 cars = cars.filter(**{lookup: _int(q.get(param))})
         if q.get("company"):
             cars = cars.filter(offers__leasing_company__code=q["company"])
+        if q.get("seller"):  # cars a company sells itself (its company page)
+            cars = cars.filter(organization__code=q["seller"])
         cars = cars.order_by(SORTS.get(q.get("sort"), "-updated_at"), "id")
 
         paginator = CarPagination()
@@ -156,6 +163,56 @@ class PublicFilters(APIView):
                 for o in Organization.objects.filter(is_leasing=True).order_by("name")
             ],
         })
+
+
+def public_companies():
+    """Partner companies with how many cars they sell on the site."""
+    return (
+        Organization.objects.filter(Q(is_leasing=True) | Q(is_dealer=True))
+        .annotate(
+            cars_count=Count(
+                "cars",
+                filter=Q(cars__status=Car.Status.ACTIVE, cars__offers__isnull=False),
+                distinct=True,
+            ),
+            offers_count=Count("offers", filter=Q(offers__car__status=Car.Status.ACTIVE), distinct=True),
+        )
+        .order_by("-cars_count", "name")
+    )
+
+
+def company_data(o, request):
+    return {
+        "code": o.code,
+        "name": o.name,
+        "logo": request.build_absolute_uri(o.logo.url) if o.logo else None,
+        "is_leasing": o.is_leasing,
+        "is_dealer": o.is_dealer,
+        "cars_count": o.cars_count,
+        "offers_count": o.offers_count,
+        "phone": o.phone,
+        "email": o.email,
+        "address": o.address,
+    }
+
+
+class PublicCompanies(APIView):
+    authentication_classes = PUBLIC["authentication_classes"]
+    permission_classes = PUBLIC["permission_classes"]
+
+    def get(self, request):
+        # Only companies that have something on the site.
+        return Response([
+            company_data(o, request) for o in public_companies() if o.cars_count or o.offers_count
+        ])
+
+
+class PublicCompanyDetail(APIView):
+    authentication_classes = PUBLIC["authentication_classes"]
+    permission_classes = PUBLIC["permission_classes"]
+
+    def get(self, request, code):
+        return Response(company_data(get_object_or_404(public_companies(), code=code), request))
 
 
 class ApplicationCreateSerializer(serializers.Serializer):
