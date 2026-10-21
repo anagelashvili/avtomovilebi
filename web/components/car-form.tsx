@@ -5,6 +5,7 @@ import { useState } from "react";
 import { api, ApiError } from "@/lib/client";
 import { BODIES, CAR_STATUS, FUELS, TRANSMISSIONS, type DealerCar } from "@/lib/dealer";
 import { PhotoManager } from "./photo-manager";
+import { Select } from "./select";
 import { btn, btn2, card, ErrorNote, input, Pill, STATUS_COLOR } from "./ui";
 
 type Field = {
@@ -97,15 +98,23 @@ export function CarForm({ initial }: { initial?: DealerCar }) {
         <section className={`${card} flex flex-col gap-3 p-5`}>
           <h2 className="text-[17px] font-bold">მანქანის მონაცემები</h2>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-3">
-            {FIELDS.map((f) => (
-              <label key={f.name} className="flex flex-col gap-1">
-                {f.label}
-                {f.options ? (
-                  <select name={f.name} defaultValue={String(car?.[f.name] ?? "")} required={f.required} className={input}>
-                    <option value="">{f.required ? "აირჩიეთ" : "—"}</option>
-                    {f.options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-                  </select>
-                ) : (
+            {FIELDS.map((f) =>
+              f.options ? (
+                <div key={f.name} className="flex flex-col gap-1">
+                  <Select
+                    label={f.label}
+                    labelClassName=""
+                    className="gap-1"
+                    name={f.name}
+                    required={f.required}
+                    defaultValue={String(car?.[f.name] ?? "")}
+                    options={[{ value: "", label: f.required ? "აირჩიეთ" : "—" }, ...f.options]}
+                  />
+                  {errors[f.name] && <span className="text-sm text-[#9a1c1c]">{errors[f.name]}</span>}
+                </div>
+              ) : (
+                <label key={f.name} className="flex flex-col gap-1">
+                  {f.label}
                   <input
                     name={f.name}
                     defaultValue={String(car?.[f.name] ?? "")}
@@ -114,10 +123,10 @@ export function CarForm({ initial }: { initial?: DealerCar }) {
                     aria-invalid={!!errors[f.name]}
                     className={input}
                   />
-                )}
-                {errors[f.name] && <span className="text-sm text-[#9a1c1c]">{errors[f.name]}</span>}
-              </label>
-            ))}
+                  {errors[f.name] && <span className="text-sm text-[#9a1c1c]">{errors[f.name]}</span>}
+                </label>
+              ),
+            )}
           </div>
           <label className="flex flex-col gap-1">
             აღწერა

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { CarRow } from "@/components/car-cards";
+import { Select } from "@/components/select";
 import { SortSelect } from "@/components/sort-select";
 import { getCars, getFilters, type Filters } from "@/lib/api";
 
@@ -97,20 +98,20 @@ function FilterForm({ sp, filters }: { sp: Params; filters: Filters }) {
     <form action="/cars" aria-label="ფილტრი" className="flex flex-[1_1_260px] flex-col gap-4 rounded-lg border border-line bg-white p-[18px] sm:max-w-[300px]">
       <b className="text-[17px]">ფილტრი</b>
       {sp.sort && <input type="hidden" name="sort" value={str("sort")} />}
-      <label className={label}>
-        მარკა
-        <select name="make" defaultValue={str("make")} className={field}>
-          <option value="">ყველა მარკა</option>
-          {filters.makes.map((m) => <option key={m}>{m}</option>)}
-        </select>
-      </label>
-      <label className={label}>
-        ძარის ტიპი
-        <select name="body" defaultValue={str("body")} className={field}>
-          <option value="">ყველა</option>
-          {filters.bodies.map((b) => <option key={b.value} value={b.value}>{b.label}</option>)}
-        </select>
-      </label>
+      <Select
+        key={`make-${str("make")}`}
+        label="მარკა"
+        name="make"
+        defaultValue={str("make")}
+        options={[{ value: "", label: "ყველა მარკა" }, ...filters.makes.map((m) => ({ value: m, label: m }))]}
+      />
+      <Select
+        key={`body-${str("body")}`}
+        label="ძარის ტიპი"
+        name="body"
+        defaultValue={str("body")}
+        options={[{ value: "", label: "ყველა" }, ...filters.bodies]}
+      />
       {[
         { title: "ფასი, ლ", min: "price_min", max: "price_max" },
         { title: "წელი", min: "year_min", max: "year_max" },
@@ -140,13 +141,13 @@ function FilterForm({ sp, filters }: { sp: Params; filters: Filters }) {
         თვიური გადასახდელი, ლ
         <input name="monthly_max" defaultValue={str("monthly_max")} inputMode="numeric" placeholder="მდე" className={field} />
       </label>
-      <label className={label}>
-        ლიზინგ კომპანია
-        <select name="company" defaultValue={str("company")} className={field}>
-          <option value="">ყველა</option>
-          {filters.companies.map((c) => <option key={c.value} value={c.value}>{c.label}</option>)}
-        </select>
-      </label>
+      <Select
+        key={`company-${str("company")}`}
+        label="ლიზინგ კომპანია"
+        name="company"
+        defaultValue={str("company")}
+        options={[{ value: "", label: "ყველა" }, ...filters.companies]}
+      />
       <button className="min-h-11 rounded-md bg-brand px-5 font-bold text-white hover:bg-brand-dark">გაფილტვრა</button>
       <Link href="/cars" className="text-center text-sm font-semibold text-brand">გასუფთავება</Link>
     </form>

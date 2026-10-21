@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CarTile, photoZoom } from "@/components/car-cards";
+import { Select } from "@/components/select";
 import { getCars, getFilters, type CarCard } from "@/lib/api";
 import { gel, n } from "@/lib/format";
 
@@ -36,24 +37,12 @@ export default async function Home() {
             მანქანის ფასი, მდე
             <input name="price_max" inputMode="numeric" placeholder="მაგ. 40000" className="min-h-11 rounded-md border border-field px-3 font-normal" />
           </label>
-          <label className="flex flex-col gap-1.5 font-bold">
-            თვიური გადასახდელი, მდე
-            <select name="monthly_max" className="min-h-11 rounded-md border border-field bg-white px-3 font-normal">
-              <option value="">ნებისმიერი</option>
-              {MONTHLY.map((m) => (
-                <option key={m} value={m}>{gel(m)}</option>
-              ))}
-            </select>
-          </label>
-          <label className="flex flex-col gap-1.5 font-bold">
-            ძარის ტიპი
-            <select name="body" className="min-h-11 rounded-md border border-field bg-white px-3 font-normal">
-              <option value="">ყველა</option>
-              {filters.bodies.map((b) => (
-                <option key={b.value} value={b.value}>{b.label}</option>
-              ))}
-            </select>
-          </label>
+          <Select
+            label="თვიური გადასახდელი, მდე"
+            name="monthly_max"
+            options={[{ value: "", label: "ნებისმიერი" }, ...MONTHLY.map((m) => ({ value: String(m), label: gel(m) }))]}
+          />
+          <Select label="ძარის ტიპი" name="body" options={[{ value: "", label: "ყველა" }, ...filters.bodies]} />
           <button className="min-h-11 rounded-md bg-brand px-5 text-base font-bold text-white hover:bg-brand-dark">
             განცხადებების ნახვა
           </button>
