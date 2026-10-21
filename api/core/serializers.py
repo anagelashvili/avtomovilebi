@@ -1,3 +1,4 @@
+from django.conf import settings
 from rest_framework import serializers
 
 from .models import Car, CarPhoto, Organization, User
@@ -29,9 +30,17 @@ class CarPhotoSerializer(serializers.ModelSerializer):
     def validate_image(self, image):
         if image.size > MAX_PHOTO_BYTES:
             raise serializers.ValidationError("ფოტო 10 MB-ზე დიდი არ უნდა იყოს.")
-        fmt = getattr(getattr(image, "image", None), "format", None)
-        if fmt not in PHOTO_FORMATS:
+        pil = getattr(image, "image", None)
+        if getattr(pil, "format", None) not in PHOTO_FORMATS:
             raise serializers.ValidationError("დასაშვებია JPG, PNG ან WEBP.")
+        # Small photos look blurry on the car page (shown ~720px wide, more
+        # on sharp screens), so they're refused rather than stretched.
+        width = getattr(pil, "width", 0) or 0
+        if width < settings.PHOTO_MIN_WIDTH:
+            raise serializers.ValidationError(
+                f"ფოტო ძალიან პატარაა ({width} პიქსელი სიგანეში). "
+                f"საჭიროა მინიმუმ {settings.PHOTO_MIN_WIDTH} პიქსელი — ატვირთეთ ორიგინალი ფოტო."
+            )
         return image
 
 

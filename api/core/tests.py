@@ -39,9 +39,9 @@ def xlsx(rows, headers=HEADERS):
     )
 
 
-def png():
+def png(width=1200, height=800):
     buf = BytesIO()
-    Image.new("RGB", (8, 8), "red").save(buf, "PNG")
+    Image.new("RGB", (width, height), "red").save(buf, "PNG")
     return SimpleUploadedFile("car.png", buf.getvalue(), content_type="image/png")
 
 
@@ -229,6 +229,13 @@ class DealerApiTests(TestCase):
         self.assertEqual(r.json()["year"], ["მიუთითეთ რიცხვი."])
         self.assertTrue(all(not m.isascii() for m in r.json()["make"]))  # Django's own Georgian wording
         self.assertEqual(APIClient().get("/api/dealer/cars/").json()["detail"], "გთხოვთ, შეხვიდეთ სისტემაში.")
+
+    def test_small_photo_is_refused(self):
+        car = make_car(self.dealer)
+        r = self.client.post(f"/api/dealer/cars/{car.id}/photos/", {"image": png(640, 400)}, format="multipart")
+        self.assertEqual(r.status_code, 400)
+        self.assertIn("640", str(r.json()))
+        self.assertFalse(car.photos.exists())
 
     def test_non_image_upload_is_refused(self):
         car = make_car(self.dealer)

@@ -18,6 +18,8 @@ const nextConfig: NextConfig = {
     ];
   },
   images: {
+    // 75 for thumbnails, 90 for the big photos (hero, car page).
+    qualities: [75, 90],
     remotePatterns: [
       {
         protocol: apiUrl.protocol.replace(":", "") as "http" | "https",

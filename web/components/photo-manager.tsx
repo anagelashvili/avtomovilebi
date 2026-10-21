@@ -116,7 +116,11 @@ export function PhotoManager({
           <CameraIcon />
         </div>
       )}
-      {!compact && <p className="text-[13px] text-muted">პირველი ფოტო მთავარია. ★ — მთავარად დაყენება.</p>}
+      {!compact && (
+        <p className="text-[13px] text-muted">
+          პირველი ფოტო მთავარია. ★ — მთავარად დაყენება. ფოტო მინიმუმ 1000 პიქსელი სიგანისა უნდა იყოს — ატვირთეთ ორიგინალი, არა სქრინშოტი.
+        </p>
+      )}
       <ErrorNote>{error}</ErrorNote>
     </div>
   );

@@ -59,7 +59,7 @@ async function CarView({ params }: { params: Promise<{ id: string }> }) {
       <div className="grid items-start gap-6 lg:grid-cols-[1.5fr_1fr]">
         <div className="flex min-w-0 flex-col gap-3.5">
           <div className="relative h-[260px] overflow-hidden rounded-lg border border-line bg-[#ece6f6] sm:h-[430px]">
-            {car.photos[0] && <Image src={car.photos[0]} alt={name} fill priority sizes="(max-width: 1024px) 100vw, 720px" className="object-cover" />}
+            {car.photos[0] && <Image src={car.photos[0]} alt={name} fill priority quality={90} sizes="(max-width: 1024px) 100vw, 720px" className="object-cover" />}
           </div>
           {car.photos.length > 1 && (
             <div className="grid grid-cols-5 gap-2">

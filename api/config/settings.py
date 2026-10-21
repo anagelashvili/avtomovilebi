@@ -207,6 +207,9 @@ LOGGING = {
     "loggers": {"core": {"handlers": ["console"], "level": "INFO"}},
 }
 
+# Car photos narrower than this are refused (they'd look blurry on the site).
+PHOTO_MIN_WIDTH = int(os.environ.get("PHOTO_MIN_WIDTH", "1000"))
+
 # Excel uploads: reject anything bigger before parsing.
 EXCEL_MAX_BYTES = 5 * 1024 * 1024
 EXCEL_MAX_ROWS = 2000

@@ -166,7 +166,7 @@ function Hero({ cars }: { cars: CarCard[] }) {
         {main && (
           <div className="grid h-[400px] grid-cols-[2fr_1fr_1fr] grid-rows-2 gap-2.5 max-sm:h-[260px] max-sm:grid-cols-1 max-sm:grid-rows-1">
             <Link href={`/cars/${main.id}`} className={`${tile} row-span-2`}>
-              <Image src={main.photo!} alt={`${main.make} ${main.model}`} fill priority sizes="(max-width: 640px) 100vw, 500px" className={zoom} />
+              <Image src={main.photo!} alt={`${main.make} ${main.model}`} fill priority quality={90} sizes="(max-width: 640px) 100vw, 500px" className={zoom} />
               <span className="absolute bottom-3.5 left-3.5 rounded-full bg-white px-4 py-2 text-sm font-bold transition-colors duration-300 group-hover:bg-ink group-hover:text-white">
                 {main.make} {main.model} · თვიურად {gel(main.monthly_from)}-დან
               </span>
