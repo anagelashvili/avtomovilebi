@@ -44,7 +44,7 @@ export function PartnerForm() {
   if (sent) {
     return (
       <div className="flex flex-col gap-3">
-        <p role="status" className="rounded-md bg-[#d9f3e1] px-3 py-2 text-[#17653a]">
+        <p role="status" className="rounded-md bg-ok-soft px-3 py-2 text-ok">
           მოთხოვნა გაიგზავნა. ჩვენი გუნდი მალე დაგიკავშირდებათ.
         </p>
         <Link href="/" className="font-semibold text-brand">← მთავარი გვერდი</Link>

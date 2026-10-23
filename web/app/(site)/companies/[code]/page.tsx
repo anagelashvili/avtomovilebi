@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { CarRow } from "@/components/car-cards";
+import { CarGrid } from "@/components/car-cards";
 import { CompanyAvatar, cars as carsLabel } from "@/components/company-card";
 import { getCars, getCompany } from "@/lib/api";
 
@@ -70,8 +70,8 @@ async function CompanyView({ params }: { params: Promise<{ code: string }> }) {
 
       <h2 className="mb-3 text-xl font-bold">{company.name}-ის მანქანები</h2>
       {results.length ? (
-        <div className="flex flex-col gap-3.5">
-          {results.map((car) => <CarRow key={car.id} car={car} />)}
+        <div className="flex flex-col gap-5">
+          <CarGrid cars={results} />
           {count > results.length && (
             <Link href={`/cars?seller=${company.code}`} className="text-center font-semibold text-brand">
               ყველა {count} მანქანის ნახვა →

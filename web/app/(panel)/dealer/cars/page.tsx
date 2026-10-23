@@ -55,7 +55,7 @@ export default function MyCarsPage() {
                     {car.photos[0] ? (
                       <img src={car.photos[0].image} alt="" className="h-12 w-[72px] rounded object-cover" />
                     ) : (
-                      <span className="flex h-12 w-[72px] items-center justify-center rounded bg-[#ece6f6]"><CameraIcon size={24} /></span>
+                      <span className="flex h-12 w-[72px] items-center justify-center rounded bg-photo"><CameraIcon size={24} /></span>
                     )}
                   </td>
                   <td className={td}>{car.external_id}</td>

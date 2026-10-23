@@ -93,7 +93,7 @@ export default function MembersPage() {
       </form>
 
       <ErrorNote>{error}</ErrorNote>
-      {note && <p role="status" className="font-semibold text-[#17653a]">{note}</p>}
+      {note && <p role="status" className="font-semibold text-ok">{note}</p>}
 
       {members && (
         <div className={`${card} overflow-x-auto`}>

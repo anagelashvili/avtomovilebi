@@ -25,6 +25,8 @@ export type CarCard = {
   photo: string | null;
   monthly_from: number;
   companies: string[];
+  /** Cheapest monthly payment first. */
+  offers: Offer[];
 };
 
 export type Offer = {
@@ -41,7 +43,6 @@ export type CarDetail = CarCard & {
   photos: string[];
   /** Author and licence of the main photo, when its licence asks for credit. */
   photo_credit: string;
-  offers: Offer[];
 };
 
 export type Option = { value: string; label: string };
@@ -50,6 +51,8 @@ export type Filters = {
   bodies: Option[];
   fuels: Option[];
   companies: Option[];
+  /** Each car's lowest monthly payment, sorted (for the budget slider). */
+  monthly: number[];
 };
 
 export type CarPage = { count: number; next: string | null; previous: string | null; results: CarCard[] };

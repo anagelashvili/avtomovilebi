@@ -87,7 +87,7 @@ export default function OverviewPage() {
       </div>
 
       <ErrorNote>{error}</ErrorNote>
-      {note && <p role="status" className="font-semibold text-[#17653a]">{note}</p>}
+      {note && <p role="status" className="font-semibold text-ok">{note}</p>}
       {!data && !error && <p className="text-muted">იტვირთება…</p>}
 
       {data && (

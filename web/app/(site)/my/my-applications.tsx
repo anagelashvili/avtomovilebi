@@ -159,7 +159,7 @@ function ApplicationCard({ app }: { app: MyApp }) {
           <Link href={`/cars/${app.car_id}`} className="text-lg font-bold hover:text-brand">{app.car}</Link>
           <div className="text-muted">{app.company} · {gel(app.monthly_gel)}/თვე · {app.term_months} თვე</div>
         </div>
-        <div className="rounded-lg border-2 border-dashed border-[#ffc800] bg-[#fff9de] px-3 py-1.5 text-lg font-bold tracking-[2px]">{app.code}</div>
+        <div className="rounded-lg border-2 border-dashed border-cta bg-sun-soft px-3 py-1.5 text-lg font-bold tracking-[2px]">{app.code}</div>
       </div>
 
       <ol className="mt-5 grid grid-cols-3 gap-2" aria-label="განაცხადის ეტაპები">

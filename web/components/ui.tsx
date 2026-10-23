@@ -12,9 +12,9 @@ export const td = "px-3 py-3.5";
 const PILL = {
   yellow: "bg-sun-soft text-sun-ink",
   blue: "bg-[#dbe8ff] text-[#1a3f8a]",
-  green: "bg-[#d9f3e1] text-[#17653a]",
+  green: "bg-ok-soft text-ok",
   red: "bg-[#fde0e0] text-[#9a1c1c]",
-  purple: "bg-[#ece6f6] text-brand-dark",
+  purple: "bg-photo text-brand-dark",
 };
 
 export function Pill({ color, children }: { color: keyof typeof PILL; children: React.ReactNode }) {
@@ -40,7 +40,7 @@ export function ErrorNote({ children }: { children: React.ReactNode }) {
 
 export function CameraIcon({ size = 30 }: { size?: number }) {
   return (
-    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#8f86a8" strokeWidth="1.6">
+    <svg aria-hidden="true" width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="#8796a8" strokeWidth="1.6">
       <rect x="2" y="6" width="20" height="14" rx="3" />
       <circle cx="12" cy="13" r="4" />
       <path d="M8 6l1.5-3h5L16 6" />

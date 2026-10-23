@@ -69,7 +69,7 @@ export function SiteFooter() {
                 key={s.label}
                 href="#"
                 aria-label={s.label}
-                className="inline-flex size-11 items-center justify-center rounded-full border border-[#4a4560] hover:text-white"
+                className="inline-flex size-11 items-center justify-center rounded-full border border-[#2c4a62] hover:text-white"
               >
                 <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   {s.icon}
@@ -96,7 +96,7 @@ export function SiteFooter() {
           <span>[სამუშაო საათები]</span>
         </div>
       </div>
-      <div className="border-t border-[#36314a]">
+      <div className="border-t border-[#23435b]">
         <div className="mx-auto flex max-w-[1240px] flex-wrap justify-between gap-3 px-6 py-[18px] text-sm">
           <span>© 2026 avtomobilebi.ge. ყველა უფლება დაცულია.</span>
           <div className="flex flex-wrap gap-5">

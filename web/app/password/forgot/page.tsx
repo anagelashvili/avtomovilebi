@@ -28,7 +28,7 @@ export default function ForgotPasswordPage() {
   return (
     <AuthCard title="პაროლის აღდგენა" subtitle="მიუთითეთ ელ-ფოსტა და გამოგიგზავნით ბმულს ახალი პაროლის დასაყენებლად.">
       {done ? (
-        <p role="status" className="rounded-md bg-[#d9f3e1] px-3 py-2 text-[#17653a]">{done}</p>
+        <p role="status" className="rounded-md bg-ok-soft px-3 py-2 text-ok">{done}</p>
       ) : (
         <form onSubmit={keepValues(send)} className="flex flex-col gap-3">
           <label className={label}>

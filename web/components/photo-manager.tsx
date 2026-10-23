@@ -68,7 +68,7 @@ export function PhotoManager({
           setDragging(false);
           upload(e.dataTransfer.files);
         }}
-        className={`rounded-lg border-2 border-dashed border-[#ffc800] text-center ${dragging ? "bg-sun-soft" : "bg-[#fff9de]"} ${compact ? "px-4 py-3" : "p-5"}`}
+        className={`rounded-lg border-2 border-dashed border-cta text-center ${dragging ? "bg-sun-soft" : "bg-sun-soft"} ${compact ? "px-4 py-3" : "p-5"}`}
       >
         გადმოაგდეთ ფოტოები აქ ან{" "}
         <button type="button" disabled={busy} onClick={() => fileInput.current?.click()} className="font-bold text-brand underline">
@@ -112,7 +112,7 @@ export function PhotoManager({
         </ul>
       )}
       {car.photos.length === 0 && !compact && (
-        <div className="flex h-[90px] items-center justify-center rounded-md bg-[#ece6f6]">
+        <div className="flex h-[90px] items-center justify-center rounded-md bg-photo">
           <CameraIcon />
         </div>
       )}

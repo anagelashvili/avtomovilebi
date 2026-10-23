@@ -4,7 +4,7 @@ import type { Company } from "@/lib/api";
 
 // The company's logo when it has one; otherwise a coloured initial, the
 // colour picked from the company code so each company keeps the same one.
-const COLORS = ["#6a1bd1", "#1e1b2e", "#f5b800", "#4b2a86", "#17653a", "#1a3f8a"];
+const COLORS = ["#1f5edc", "#0f2a3d", "#ff8a3d", "#1747b0", "#12804a", "#2c4a62"];
 
 function initial(name: string) {
   const first = name.replace(/^შპს\s+/, "").trim().charAt(0);
@@ -29,7 +29,7 @@ export function CompanyAvatar({ company, size = 48 }: { company: Company; size?:
     <span
       aria-hidden="true"
       className="inline-flex flex-none items-center justify-center rounded-xl font-extrabold"
-      style={{ width: size, height: size, fontSize: size * 0.45, background: bg, color: bg === "#f5b800" ? "#1e1b2e" : "#fff" }}
+      style={{ width: size, height: size, fontSize: size * 0.45, background: bg, color: bg === "#ff8a3d" ? "#0f2a3d" : "#fff" }}
     >
       {initial(company.name)}
     </span>

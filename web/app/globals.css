@@ -1,21 +1,27 @@
 @import "tailwindcss";
 
-/* Colours from the design mockup. */
+/* Colours (redesign): navy text, trust blue for money and selection, orange
+   only for the main action, green only for good news. */
 @theme inline {
-  --color-ink: #1e1b2e;
-  --color-muted: #6b6580;
-  --color-page: #f8f6fc;
-  --color-line: #e6e0f2;
-  --color-field: #d6cdea;
-  --color-brand: #6a1bd1;
-  --color-brand-dark: #4b2a86;
-  --color-brand-soft: #f1ecf8;
-  --color-brand-tint: #e1d4f7;
-  --color-sun: #f5b800;
-  --color-sun-soft: #fff3bf;
-  --color-sun-ink: #5c4600;
-  --color-footer: #1e1b2e;
-  --color-footer-text: #d6cdea;
+  --color-ink: #0f2a3d;
+  --color-muted: #5b6b7b;
+  --color-page: #f6f7fb;
+  --color-line: #e3e7ef;
+  --color-field: #cfd7e4;
+  --color-photo: #e7ecf4;
+  --color-brand: #1f5edc;
+  --color-brand-dark: #1747b0;
+  --color-brand-soft: #eaf0fd;
+  --color-brand-tint: #d3e0fa;
+  --color-cta: #ff8a3d;
+  --color-cta-dark: #f27424;
+  --color-sun: #ff8a3d;
+  --color-sun-soft: #ffeedf;
+  --color-sun-ink: #8a3c0b;
+  --color-ok: #12804a;
+  --color-ok-soft: #e5f5ec;
+  --color-footer: #0f2a3d;
+  --color-footer-text: #b9c6d3;
   --font-sans: var(--font-georgian), system-ui, sans-serif;
 }
 
@@ -28,4 +34,35 @@ body {
    (absolute elements otherwise position against the whole document). */
 .overflow-x-auto {
   position: relative;
+}
+
+/* Budget slider: blue fill up to the thumb (--fill), white thumb with a blue ring. */
+.range {
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 99px;
+  background: linear-gradient(to right, var(--color-brand) var(--fill, 0%), #dde3ee var(--fill, 0%));
+  cursor: pointer;
+}
+.range::-webkit-slider-thumb {
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--color-brand);
+  box-shadow: 0 2px 8px rgba(15, 42, 61, 0.25);
+}
+.range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  border: 3px solid var(--color-brand);
+  box-shadow: 0 2px 8px rgba(15, 42, 61, 0.25);
+}
+.range:focus-visible {
+  outline: 3px solid var(--color-brand-tint);
+  outline-offset: 6px;
 }

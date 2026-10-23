@@ -48,7 +48,7 @@ export default function ImportPage() {
     <div className="flex flex-col gap-5">
       <h1 className="text-3xl font-bold">Excel-ის ატვირთვა</h1>
 
-      <div className={`${card} flex flex-wrap items-center justify-between gap-3 border-2 border-dashed border-[#ffc800] p-5`}>
+      <div className={`${card} flex flex-wrap items-center justify-between gap-3 border-2 border-dashed border-cta p-5`}>
         <div>
           <b>{file ? file.name : "აირჩიეთ დღევანდელი ფაილი (.xlsx)"}</b>
           <div className="text-muted">
@@ -114,7 +114,7 @@ export default function ImportPage() {
             </table>
           </div>
 
-          <div className={`${card} flex flex-wrap items-center justify-between gap-3 border-[#ffc800] bg-[#fff9de] p-[18px]`}>
+          <div className={`${card} flex flex-wrap items-center justify-between gap-3 border-cta bg-sun-soft p-[18px]`}>
             <div>
               <b>შემდეგი ნაბიჯი: ფოტოები</b>
               <div className="mt-1">

@@ -37,6 +37,7 @@ class CarCardSerializer(serializers.ModelSerializer):
     photo = serializers.SerializerMethodField()
     monthly_from = serializers.IntegerField()
     companies = serializers.SerializerMethodField()
+    offers = OfferSerializer(many=True)  # cheapest monthly first
     fuel_label = serializers.CharField(source="get_fuel_display")
     transmission_label = serializers.CharField(source="get_transmission_display")
 
@@ -45,7 +46,7 @@ class CarCardSerializer(serializers.ModelSerializer):
         fields = [
             "id", "make", "model", "year", "body", "fuel", "fuel_label", "engine",
             "transmission_label", "mileage_km", "price_gel", "city", "updated_at",
-            "photo", "monthly_from", "companies",
+            "photo", "monthly_from", "companies", "offers",
         ]
 
     def get_photo(self, car):
@@ -59,11 +60,10 @@ class CarCardSerializer(serializers.ModelSerializer):
 class CarDetailSerializer(CarCardSerializer):
     photos = serializers.SerializerMethodField()
     photo_credit = serializers.SerializerMethodField()
-    offers = OfferSerializer(many=True)
     body_label = serializers.CharField(source="get_body_display")
 
     class Meta(CarCardSerializer.Meta):
-        fields = CarCardSerializer.Meta.fields + ["body_label", "description", "photos", "photo_credit", "offers"]
+        fields = CarCardSerializer.Meta.fields + ["body_label", "description", "photos", "photo_credit"]
 
     def get_photos(self, car):
         return [_photo_url(self.context["request"], p) for p in car.photos.all()]
@@ -80,7 +80,7 @@ def public_cars():
         .annotate(monthly_from=Min("offers__monthly_gel"))
         .prefetch_related(
             Prefetch("photos", queryset=CarPhoto.objects.order_by("position", "id")),
-            Prefetch("offers", queryset=LeaseOffer.objects.select_related("leasing_company")),
+            Prefetch("offers", queryset=LeaseOffer.objects.select_related("leasing_company").order_by("monthly_gel", "id")),
         )
         .distinct()
     )
@@ -155,6 +155,9 @@ class PublicFilters(APIView):
     def get(self, request):
         cars = Car.objects.filter(status=Car.Status.ACTIVE, offers__isnull=False)
         return Response({
+            # Each public car's lowest monthly payment, so the budget slider
+            # can say how many cars fit without asking the server each time.
+            "monthly": sorted(public_cars().values_list("monthly_from", flat=True)),
             "makes": sorted(set(cars.values_list("make", flat=True))),
             "bodies": [{"value": v, "label": l} for v, l in Car.Body.choices],
             "fuels": [{"value": v, "label": l} for v, l in Car.Fuel.choices],

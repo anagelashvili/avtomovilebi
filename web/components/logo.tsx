@@ -1,4 +1,4 @@
-/** The avtomobilebi wordmark (logo 6a): name, yellow road line, purple dot. */
+/** The avtomobilebi wordmark (logo 6a): name, orange road line, blue dot. */
 export function Logo({ size = 24, dark = false }: { size?: number; dark?: boolean }) {
   return (
     <span className="inline-flex items-center" aria-label="avtomobilebi.ge" role="img">
@@ -13,7 +13,7 @@ export function Logo({ size = 24, dark = false }: { size?: number; dark?: boolea
           <path
             d="M4 10 C60 2 150 2 222 10"
             fill="none"
-            stroke="#f5b800"
+            stroke="#ff8a3d"
             strokeWidth={Math.max(3, Math.round(size * 0.15))}
             strokeLinecap="round"
             vectorEffect="non-scaling-stroke"
@@ -28,7 +28,7 @@ export function Logo({ size = 24, dark = false }: { size?: number; dark?: boolea
           height: size * 0.28,
           marginLeft: size * 0.1,
           marginTop: size * 0.75,
-          background: dark ? "#c4a8f5" : "#6a1bd1",
+          background: dark ? "#8db0ff" : "#1f5edc",
         }}
       />
     </span>

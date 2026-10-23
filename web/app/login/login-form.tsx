@@ -30,7 +30,7 @@ export function LoginForm() {
   return (
     <form onSubmit={keepValues(submit)} className="flex flex-col gap-3">
       {params.get("password") === "set" && (
-        <p role="status" className="rounded-md bg-[#d9f3e1] px-3 py-2 text-sm text-[#17653a]">პაროლი დაყენებულია. შედით ახალი პაროლით.</p>
+        <p role="status" className="rounded-md bg-ok-soft px-3 py-2 text-sm text-ok">პაროლი დაყენებულია. შედით ახალი პაროლით.</p>
       )}
       <label className="flex flex-col gap-1 font-semibold">
         ელ-ფოსტა ან მომხმარებელი

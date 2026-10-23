@@ -146,7 +146,7 @@ export function CarForm({ initial }: { initial?: DealerCar }) {
       </div>
 
       <ErrorNote>{message}</ErrorNote>
-      {saved && <p role="status" className="font-semibold text-[#17653a]">{saved}</p>}
+      {saved && <p role="status" className="font-semibold text-ok">{saved}</p>}
       <div className="flex flex-wrap gap-2.5">
         {!car ? (
           <button name="action" value="draft" disabled={busy} className={btn}>შენახვა და ფოტოების დამატება →</button>

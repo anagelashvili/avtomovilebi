@@ -5,5 +5,5 @@ export function n(value: number) {
 }
 
 export function gel(value: number) {
-  return `${n(value)} ლ`;
+  return `${n(value)} ₾`;
 }

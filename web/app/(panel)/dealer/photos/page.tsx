@@ -48,7 +48,7 @@ export default function PhotosPage() {
         <p className="mt-1 text-muted">ფოტოებს ყველა მანქანას ცალ-ცალკე ამატებთ. პირველი ფოტო მთავარი იქნება.</p>
       </div>
 
-      {done && <p role="status" className="font-semibold text-[#17653a]">{done}</p>}
+      {done && <p role="status" className="font-semibold text-ok">{done}</p>}
 
       {cars.length === 0 ? (
         <div className={`${card} p-8 text-center`}>
@@ -62,8 +62,8 @@ export default function PhotosPage() {
               <b>ფოტო დაემატა {withPhotos.length} მანქანას {cars.length}-დან</b>
               <span className="text-muted">{withPhotos.length}/{cars.length}</span>
             </div>
-            <div className="h-2.5 rounded-full bg-[#ece6f6]" role="progressbar" aria-valuemin={0} aria-valuemax={cars.length} aria-valuenow={withPhotos.length}>
-              <div className="h-2.5 rounded-full bg-[#ffc800]" style={{ width: `${(withPhotos.length / cars.length) * 100}%` }} />
+            <div className="h-2.5 rounded-full bg-photo" role="progressbar" aria-valuemin={0} aria-valuemax={cars.length} aria-valuenow={withPhotos.length}>
+              <div className="h-2.5 rounded-full bg-cta" style={{ width: `${(withPhotos.length / cars.length) * 100}%` }} />
             </div>
           </div>
 

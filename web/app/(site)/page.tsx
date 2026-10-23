@@ -1,177 +1,176 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CarTile, photoZoom } from "@/components/car-cards";
-import { CompanyCard } from "@/components/company-card";
-import { Select } from "@/components/select";
+import { BudgetPicker } from "@/components/budget-picker";
+import { CarGrid } from "@/components/car-cards";
+import { CompanyAvatar } from "@/components/company-card";
 import { getCars, getCompanies, getFilters, type CarCard } from "@/lib/api";
-import { gel, n } from "@/lib/format";
+import { gel } from "@/lib/format";
 
-const MONTHLY = [300, 500, 800, 1200];
-const BODIES = [
-  { value: "suv", label: "ჯიპი / SUV" },
-  { value: "sedan", label: "სედანი" },
-  { value: "coupe", label: "კუპე" },
-  { value: "hatchback", label: "ჰეჩბეკი" },
+/** The budget the home page opens with (₾ a month). */
+const BUDGET = 800;
+const QUICK_BUDGETS = [500, 800, 1200, 2000];
+
+const TRUST = [
+  { title: "უფასოა მყიდველისთვის", text: "საკომისიოს კომპანია იხდის, არა თქვენ." },
+  { title: "მონაცემები დაცულია", text: "კომპანია თქვენს მონაცემებს ხედავს მხოლოდ თქვენი კოდით." },
+  { title: "ერთი განაცხადი — ერთ წუთში", text: "არც რეგისტრაცია, არც ზარების ლოდინი." },
 ];
 const STEPS = [
-  { title: "აირჩიე მანქანა", text: "ფილტრით ან თვიური გადასახდელით." },
-  { title: "გააგზავნე განაცხადი", text: "ერთი ფორმა, რამდენიმე ლიზინგ კომპანია." },
-  { title: "მიიღე კოდი", text: "კომპანიაში მისვლისას დაასახელე განაცხადის კოდი." },
+  { title: "აირჩიეთ მანქანა", text: "შეადარეთ კომპანიების შეთავაზებები: თვიური, შენატანი, ვადა." },
+  { title: "გაგზავნეთ განაცხადი", text: "ერთ წუთში. მიიღებთ პირად კოდს SMS-ით და მეილზე." },
+  { title: "მიდით კომპანიაში", text: "კოდს უჩვენებთ — მხოლოდ მაშინ ხედავს კომპანია თქვენს მონაცემებს." },
 ];
 
-const sectionTitle = "mb-4 text-2xl font-bold";
-
 export default async function Home() {
-  const [{ results: cars }, filters, companies] = await Promise.all([getCars("sort=new"), getFilters(), getCompanies()]);
-  const latest = cars.slice(0, 4);
+  const [{ results: fits }, { results: priciest }, filters, companies] = await Promise.all([
+    getCars(`monthly_max=${BUDGET}&sort=monthly`),
+    getCars(`monthly_max=${BUDGET}&sort=price_desc`),
+    getFilters(),
+    getCompanies(),
+  ]);
+  const leasing = companies.filter((c) => c.is_leasing);
+  // The hero shows the priciest car that still fits the opening budget.
+  const featured = priciest.find((c) => c.photo);
 
   return (
     <>
-      <Hero cars={cars} />
+      <section className="bg-[linear-gradient(180deg,#fff_0%,var(--color-page)_100%)]">
+        <div className="mx-auto grid max-w-[1280px] items-center gap-12 px-4 pb-14 pt-10 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-[72px] lg:pt-16">
+          <div>
+            <span className="inline-block rounded-full bg-brand-soft px-3.5 py-1 text-[13.5px] font-bold text-brand">
+              {leasing.length} ლიზინგ კომპანია · {filters.monthly.length} მანქანა
+            </span>
+            <h1 className="mt-4 text-[34px] font-extrabold leading-[1.12] tracking-tight sm:text-5xl lg:text-[54px]">
+              რამდენის გადახდა <br className="max-sm:hidden" />შეგიძლიათ <span className="text-brand">თვეში?</span>
+            </h1>
+            <p className="mb-7 mt-4 max-w-[520px] text-lg text-muted">
+              აირჩიეთ ბიუჯეტი — ვაჩვენებთ მანქანებს, რომლებიც მასში ეტევა, და ყველა კომპანიის შეთავაზებას გვერდიგვერდ.
+            </p>
+            <BudgetPicker monthly={filters.monthly} initial={BUDGET} />
+          </div>
+          {featured && <FeaturedCar car={featured} />}
+        </div>
+        <ul className="mx-auto grid max-w-[1280px] gap-5 px-4 pb-4 sm:px-8 md:grid-cols-3">
+          {TRUST.map((t) => (
+            <li key={t.title} className="flex gap-3">
+              <Check />
+              <div>
+                <b>{t.title}</b>
+                <div className="text-sm text-muted">{t.text}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </section>
 
-      <div className="relative mx-auto -mt-16 max-w-[1240px] px-6">
-        <form
-          action="/cars"
-          className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] items-end gap-4 rounded-[18px] border border-line bg-white px-6 py-5 shadow-[0_18px_40px_rgba(30,27,46,.18)]"
-        >
-          <label className="flex flex-col gap-1.5 font-bold">
-            მანქანის ფასი, მდე
-            <input name="price_max" inputMode="numeric" placeholder="მაგ. 40000" className="min-h-11 rounded-md border border-field px-3 font-normal" />
-          </label>
-          <Select
-            label="თვიური გადასახდელი, მდე"
-            name="monthly_max"
-            options={[{ value: "", label: "ნებისმიერი" }, ...MONTHLY.map((m) => ({ value: String(m), label: gel(m) }))]}
-          />
-          <Select label="ძარის ტიპი" name="body" options={[{ value: "", label: "ყველა" }, ...filters.bodies]} />
-          <button className="min-h-11 rounded-md bg-brand px-5 text-base font-bold text-white hover:bg-brand-dark">
-            განცხადებების ნახვა
-          </button>
-        </form>
-      </div>
+      <div className="mx-auto max-w-[1280px] px-4 sm:px-8">
+        {leasing.length > 0 && (
+          <section aria-labelledby="partners" className="pt-14">
+            <h2 id="partners" className="mb-4 text-center text-[13px] font-bold text-muted">შეთავაზებები ამ კომპანიებისგან</h2>
+            <ul className="flex flex-wrap justify-center gap-2.5">
+              {leasing.map((c) => (
+                <li key={c.code}>
+                  <Link
+                    href={`/companies/${c.code}`}
+                    className="flex min-h-11 items-center gap-2.5 rounded-xl border border-line bg-white py-1.5 pl-1.5 pr-4 font-bold text-[#41566a] transition hover:border-brand hover:text-brand"
+                  >
+                    <CompanyAvatar company={c} size={32} />
+                    {c.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
 
-      <div className="mx-auto flex max-w-[1240px] flex-col gap-11 px-6 pb-14 pt-10">
-        <section>
-          <h2 className={sectionTitle}>მოძებნე თვიური გადასახდელით</h2>
-          <div className="flex flex-wrap gap-2.5">
-            {MONTHLY.map((m) => (
+        <section aria-labelledby="fits" className="pt-16">
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 id="fits" className="text-[28px] font-extrabold tracking-tight sm:text-3xl">თქვენს ბიუჯეტში</h2>
+              <p className="mt-1 text-muted">ყოველთვიური გადასახადი {gel(BUDGET)}-მდე · ყველაზე იაფიდან</p>
+            </div>
+            <Link href="/cars" className="font-bold text-brand">ყველა მანქანა →</Link>
+          </div>
+          <nav aria-label="ბიუჯეტი" className="mb-5 flex flex-wrap gap-2">
+            {QUICK_BUDGETS.map((b) => (
               <Link
-                key={m}
-                href={`/cars?monthly_max=${m}`}
-                className="flex min-h-11 items-center rounded-md border-[1.5px] border-brand bg-white px-[18px] font-semibold text-brand hover:bg-brand-soft"
+                key={b}
+                href={`/cars?monthly_max=${b}&sort=monthly`}
+                className={`inline-flex min-h-10 items-center rounded-full border-[1.5px] px-4 text-sm font-semibold ${
+                  b === BUDGET ? "border-brand bg-brand text-white" : "border-line bg-white hover:border-brand hover:text-brand"
+                }`}
               >
-                თვიურად {n(m)} ლ-მდე
+                {gel(b)}-მდე
               </Link>
             ))}
-          </div>
+          </nav>
+          {fits.length ? <CarGrid cars={fits.slice(0, 4)} /> : <p className="text-muted">ამ ბიუჯეტით მანქანა ჯერ არ არის.</p>}
         </section>
 
-        <section>
-          <h2 className={sectionTitle}>ძარის ტიპი</h2>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3.5">
-            {BODIES.map((b) => {
-              const photo = cars.find((c) => c.body === b.value && c.photo)?.photo;
-              return (
-                <Link key={b.value} href={`/cars?body=${b.value}`} className="group overflow-hidden rounded-lg border border-line bg-white transition-shadow hover:shadow-[0_6px_18px_rgba(30,27,46,.12)]">
-                  <div className="relative h-[120px] overflow-hidden bg-[#ece6f6]">
-                    {photo && <Image src={photo} alt="" fill sizes="300px" className={photoZoom} />}
-                  </div>
-                  <div className="px-3 py-2.5 font-semibold">{b.label}</div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        <section>
-          <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="text-2xl font-bold">ახალი განცხადებები</h2>
-            <Link href="/cars" className="font-semibold text-brand">ყველას ნახვა →</Link>
-          </div>
-          {latest.length ? (
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4">
-              {latest.map((car) => <CarTile key={car.id} car={car} />)}
+        <section id="how" aria-labelledby="how-title" className="scroll-mt-4 py-[72px]">
+          <div className="grid items-center gap-10 rounded-3xl bg-ink p-7 text-white sm:p-12 lg:grid-cols-[1fr_1.6fr] lg:gap-12">
+            <div>
+              <h2 id="how-title" className="text-[28px] font-extrabold sm:text-3xl">როგორ მუშაობს</h2>
+              <p className="mb-6 mt-3 text-footer-text">
+                თქვენი პირადი ნომერი და ტელეფონი დაშიფრულია. კომპანია მათ ვერ ნახავს, სანამ თავად არ მიუტანთ კოდს.
+              </p>
+              <div className="inline-flex items-center gap-3 rounded-2xl bg-[#163a55] px-5 py-3.5">
+                <span className="text-[13px] text-footer-text">თქვენი კოდი</span>
+                <b className="text-[26px] tracking-[.12em] text-[#ffb27d]">GL-48213</b>
+              </div>
             </div>
-          ) : (
-            <p className="text-muted">ჯერ განცხადებები არ არის.</p>
-          )}
-        </section>
-
-        <section>
-          <div className="mb-4 flex items-baseline justify-between">
-            <h2 className="text-2xl font-bold">ლიზინგ პარტნიორები</h2>
-            <Link href="/companies" className="font-semibold text-brand">ყველა კომპანია →</Link>
+            <ol className="grid gap-4 md:grid-cols-3">
+              {STEPS.map((s, i) => (
+                <li key={s.title} className="rounded-[18px] bg-[#163a55] p-5">
+                  <span className="inline-flex size-9 items-center justify-center rounded-full bg-cta font-extrabold text-ink">{i + 1}</span>
+                  <b className="mb-1.5 mt-3.5 block text-[17px]">{s.title}</b>
+                  <span className="text-[14.5px] text-footer-text">{s.text}</span>
+                </li>
+              ))}
+            </ol>
           </div>
-          <div className="grid grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-3.5">
-            {companies.slice(0, 8).map((c) => <CompanyCard key={c.code} company={c} />)}
-          </div>
-        </section>
-
-        <section id="how">
-          <h2 className={sectionTitle}>როგორ მუშაობს</h2>
-          <ol className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-5">
-            {STEPS.map((s, i) => (
-              <li key={s.title} className="flex gap-3.5 rounded-lg border border-line bg-white p-5">
-                <span className="flex size-9 flex-none items-center justify-center rounded-full bg-[#ffc800] font-bold">{i + 1}</span>
-                <div>
-                  <b>{s.title}</b>
-                  <div className="mt-1 text-muted">{s.text}</div>
-                </div>
-              </li>
-            ))}
-          </ol>
         </section>
       </div>
     </>
   );
 }
 
-// Hero photo tiles: the whole tile grows and comes forward (over its
-// neighbours) on hover or keyboard focus; skipped for people who ask their
-// system for less motion.
-const tile =
-  "group relative overflow-hidden rounded-[14px] transition duration-300 ease-out hover:z-10 hover:shadow-[0_18px_40px_rgba(30,27,46,.4)] focus-visible:z-10 focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ink motion-safe:hover:scale-[1.06] motion-safe:focus-visible:scale-[1.06]";
-const zoom = "object-cover";
-
-function Hero({ cars }: { cars: CarCard[] }) {
-  const withPhotos = cars.filter((c) => c.photo).slice(0, 5);
-  const [main, ...rest] = withPhotos;
+function Check() {
   return (
-    <div className="overflow-hidden bg-[linear-gradient(100deg,#f5a800,#ffe81f)] pb-[110px] pt-14">
-      <div className="mx-auto grid max-w-[1240px] items-center gap-10 px-6 lg:grid-cols-[.8fr_1.2fr]">
-        <div className="flex flex-col gap-6">
-          <h1 className="text-4xl font-extrabold leading-tight sm:text-5xl">იპოვე მანქანა და ლიზინგი ერთ ადგილას</h1>
-          <ul className="flex flex-col gap-3.5 text-lg font-bold sm:text-xl">
-            {["ავტომობილები ყველა ლიზინგ კომპანიისგან", "შეადარე შეთავაზებები ერთ ადგილას", "ერთი განაცხადი და ერთი კოდი"].map((t) => (
-              <li key={t} className="flex items-start gap-4">
-                <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="mt-0.5 flex-none sm:mt-1">
-                  <path d="M4 12.5l5 5L20 6.5" />
-                </svg>
-                {t}
-              </li>
-            ))}
-          </ul>
-        </div>
-        {main && (
-          <div className="grid h-[400px] grid-cols-[2fr_1fr_1fr] grid-rows-2 gap-2.5 max-sm:h-[260px] max-sm:grid-cols-1 max-sm:grid-rows-1">
-            <Link href={`/cars/${main.id}`} className={`${tile} row-span-2`}>
-              <Image src={main.photo!} alt={`${main.make} ${main.model}`} fill priority quality={90} sizes="(max-width: 640px) 100vw, 500px" className={zoom} />
-              <span className="absolute bottom-3.5 left-3.5 rounded-full bg-white px-4 py-2 text-sm font-bold transition-colors duration-300 group-hover:bg-ink group-hover:text-white">
-                {main.make} {main.model} · თვიურად {gel(main.monthly_from)}-დან
-              </span>
-            </Link>
-            {rest.map((c) => (
-              <Link key={c.id} href={`/cars/${c.id}`} className={`${tile} max-sm:hidden`}>
-                <Image src={c.photo!} alt={`${c.make} ${c.model}`} fill sizes="250px" className={zoom} />
-                {/* Small tiles have no label; show one when hovered. */}
-                <span className="absolute inset-x-2 bottom-2 truncate rounded-full bg-white/95 px-3 py-1 text-center text-xs font-bold opacity-0 transition duration-300 group-hover:opacity-100 group-focus-visible:opacity-100 motion-safe:translate-y-2 motion-safe:group-hover:translate-y-0 motion-safe:group-focus-visible:translate-y-0">
-                  {c.make} {c.model} · {gel(c.monthly_from)}/თვე
-                </span>
-              </Link>
-            ))}
-          </div>
-        )}
+    <span aria-hidden="true" className="inline-flex size-[30px] flex-none items-center justify-center rounded-full bg-ok-soft text-ok">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 12.5l5 5L20 6.5" />
+      </svg>
+    </span>
+  );
+}
+
+function FeaturedCar({ car }: { car: CarCard }) {
+  const best = car.offers[0];
+  return (
+    <Link href={`/cars/${car.id}`} className="group relative block max-lg:mx-auto max-lg:w-full max-lg:max-w-[620px]">
+      <div className="relative aspect-[5/4] overflow-hidden rounded-[28px] bg-photo shadow-[0_30px_60px_rgba(15,42,61,.18)]">
+        <Image
+          src={car.photo!}
+          alt=""
+          fill
+          priority
+          quality={90}
+          sizes="(max-width: 1024px) 100vw, 620px"
+          className="object-cover transition-transform duration-700 ease-out motion-safe:group-hover:scale-[1.03]"
+        />
       </div>
-    </div>
+      <div className="absolute bottom-6 left-4 min-w-[260px] rounded-[18px] bg-white px-5 py-4 shadow-[0_16px_40px_rgba(15,42,61,.18)] lg:-left-9 lg:bottom-9">
+        <div className="font-bold">{car.make} {car.model} {car.year}</div>
+        <div className="flex items-baseline gap-1.5">
+          <span className="text-[30px] font-extrabold tracking-tight text-brand">{gel(car.monthly_from)}</span>
+          <span className="text-muted">/ თვეში</span>
+        </div>
+        <div className="mt-1 flex flex-wrap items-center gap-2">
+          <span className="rounded-full bg-ok-soft px-2.5 py-0.5 text-[12.5px] font-bold text-ok">✓ ბიუჯეტში ეტევა</span>
+          {best && <span className="text-[13px] text-muted">{best.company} · {best.term_months} თვე</span>}
+        </div>
+      </div>
+    </Link>
   );
 }
