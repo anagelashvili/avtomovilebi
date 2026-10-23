@@ -1,0 +1,1843 @@
+{
+ "filters": {
+  "makes": [
+   "BMW",
+   "Chevrolet",
+   "Fiat",
+   "Ford",
+   "Hyundai",
+   "Jeep",
+   "Kia",
+   "Land Rover",
+   "Lexus",
+   "Mercedes-Benz",
+   "Nissan",
+   "Opel",
+   "Porsche",
+   "Toyota",
+   "Volkswagen"
+  ],
+  "bodies": [
+   {
+    "value": "sedan",
+    "label": "სედანი"
+   },
+   {
+    "value": "suv",
+    "label": "ჯიპი / SUV"
+   },
+   {
+    "value": "hatchback",
+    "label": "ჰეჩბეკი"
+   },
+   {
+    "value": "wagon",
+    "label": "უნივერსალი"
+   },
+   {
+    "value": "coupe",
+    "label": "კუპე"
+   },
+   {
+    "value": "minivan",
+    "label": "მინივენი"
+   },
+   {
+    "value": "pickup",
+    "label": "პიკაპი"
+   }
+  ],
+  "fuels": [
+   {
+    "value": "petrol",
+    "label": "ბენზინი"
+   },
+   {
+    "value": "diesel",
+    "label": "დიზელი"
+   },
+   {
+    "value": "hybrid",
+    "label": "ჰიბრიდი"
+   },
+   {
+    "value": "electric",
+    "label": "ელექტრო"
+   },
+   {
+    "value": "gas",
+    "label": "გაზი"
+   }
+  ],
+  "companies": [
+   {
+    "value": "demo-liberty",
+    "label": "Liberty Bank"
+   },
+   {
+    "value": "demo-mogo",
+    "label": "MOGO"
+   },
+   {
+    "value": "demo-tera",
+    "label": "Tera Auto"
+   },
+   {
+    "value": "demo-tbc-leasing",
+    "label": "თიბისი ლიზინგი"
+   },
+   {
+    "value": "demo-credo",
+    "label": "კრედო ბანკი"
+   },
+   {
+    "value": "demo-miso-euro",
+    "label": "მისო ევრო კრედიტი"
+   },
+   {
+    "value": "demo-silk",
+    "label": "სილქ ბანკი"
+   },
+   {
+    "value": "demo-skapi",
+    "label": "სკაპი"
+   },
+   {
+    "value": "demo-dizi",
+    "label": "შპს დიზი"
+   },
+   {
+    "value": "demo-miso-leader",
+    "label": "შპს მისო ლიდერ კრედიტი"
+   },
+   {
+    "value": "org-404999888",
+    "label": "შპს ტესტ ლიზინგი"
+   },
+   {
+    "value": "demo-centrali",
+    "label": "ცენტრალი"
+   }
+  ]
+ },
+ "companies": [
+  {
+   "code": "demo-liberty",
+   "name": "Liberty Bank",
+   "logo": "/demo/media/logos/demo-liberty.png",
+   "is_leasing": true,
+   "is_dealer": true,
+   "cars_count": 3,
+   "offers_count": 6,
+   "phone": "[ტელეფონი]",
+   "email": "",
+   "address": "[მისამართი]"
+  },
+  {
+   "code": "demo-mogo",
+   "name": "MOGO",
+   "logo": "/demo/media/logos/demo-mogo.png",
+   "is_leasing": true,
+   "is_dealer": true,
+   "cars_count": 3,
+   "offers_count": 6,
+   "phone": "[ტელეფონი]",
+   "email": "",
+   "address": "[მისამართი]"
+  },
+  {
+   "code": "demo-tera",
+   "name": "Tera Auto",
+   "logo": "/demo/media/logos/demo-tera.png",
+   "is_leasing": true,
+   "is_dealer": true,
+   "cars_count": 3,
+   "offers_count": 6,
+   "phone": "[ტელეფონი]",
+   "email": "",
+   "address": "[მისამართი]"
+  },
+  {
+   "code": "demo-tbc-leasing",
+   "name": "თიბისი ლიზინგი",
+   "logo": "/demo/media/logos/demo-tbc-leasing.png",
+   "is_leasing": true,
+   "is_dealer": true,
+   "cars_count": 3,
+   "offers_count": 6,
+   "phone": "[ტელეფონი]",
+   "email": "",
+   "address": "[მისამართი]"
+  },
+  {
+   "code": "demo-credo",
+   "name": "კრედო ბანკი",
+   "logo": null,
+   "is_leasing": true,
+   "is_dealer": true,
+   "cars_count": 3,
+   "offers_count": 6,
+   "phone": "[ტელეფონი]",
+   "email": "",
+   "address": "[მისამართი]"
+  },
+  {
+   "code": "demo-miso-euro",
+   "name": "მისო ევრო კრედიტი",
+   "logo": null,
+   "is_leasing": true,
+   "is_dealer": true,
+   "cars_count": 3,
+   "offers_count": 6,
+   "phone": "[ტელეფონი]",
+   "email": "",
+   "address": "[მისამართი]"
+  },
+  {
+   "code": "demo-silk",
+   "name": "სილქ ბანკი",
+   "logo": "/demo/media/logos/demo-silk.png",
+   "is_leasing": true,
+   "is_dealer": true,
+   "cars_count": 3,
+   "offers_count": 6,
+   "phone": "[ტელეფონი]",
+   "email": "",
+   "address": "[მისამართი]"
+  },
+  {
+   "code": "demo-skapi",
+   "name": "სკაპი",
+   "logo": "/demo/media/logos/demo-skapi.png",
+   "is_leasing": true,
+   "is_dealer": true,
+   "cars_count": 3,
+   "offers_count": 6,
+   "phone": "[ტელეფონი]",
+   "email": "",
+   "address": "[მისამართი]"
+  },
+  {
+   "code": "demo-dizi",
+   "name": "შპს დიზი",
+   "logo": "/demo/media/logos/demo-dizi.png",
+   "is_leasing": true,
+   "is_dealer": true,
+   "cars_count": 3,
+   "offers_count": 6,
+   "phone": "[ტელეფონი]",
+   "email": "",
+   "address": "[მისამართი]"
+  },
+  {
+   "code": "demo-miso-leader",
+   "name": "შპს მისო ლიდერ კრედიტი",
+   "logo": null,
+   "is_leasing": true,
+   "is_dealer": true,
+   "cars_count": 3,
+   "offers_count": 6,
+   "phone": "[ტელეფონი]",
+   "email": "",
+   "address": "[მისამართი]"
+  },
+  {
+   "code": "demo-centrali",
+   "name": "ცენტრალი",
+   "logo": "/demo/media/logos/demo-centrali.png",
+   "is_leasing": true,
+   "is_dealer": true,
+   "cars_count": 3,
+   "offers_count": 6,
+   "phone": "[ტელეფონი]",
+   "email": "",
+   "address": "[მისამართი]"
+  }
+ ],
+ "cars": [
+  {
+   "id": 81,
+   "make": "Volkswagen",
+   "model": "Jetta",
+   "year": 2010,
+   "body": "sedan",
+   "fuel": "gas",
+   "fuel_label": "გაზი",
+   "engine": "2.5",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 248000,
+   "price_gel": 8830,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.737811+04:00",
+   "photo": "/demo/media/cars/42/81/7c8de23d24d0aa44.jpg",
+   "monthly_from": 175,
+   "companies": [
+    "Tera Auto",
+    "თიბისი ლიზინგი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/42/81/7c8de23d24d0aa44.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 156,
+     "company": "თიბისი ლიზინგი",
+     "term_months": 48,
+     "down_payment_gel": 2649,
+     "monthly_gel": 175
+    },
+    {
+     "id": 155,
+     "company": "Tera Auto",
+     "term_months": 36,
+     "down_payment_gel": 1766,
+     "monthly_gel": 255
+    }
+   ],
+   "seller": "demo-tera",
+   "offer_companies": [
+    "demo-tera",
+    "demo-tbc-leasing"
+   ]
+  },
+  {
+   "id": 80,
+   "make": "Nissan",
+   "model": "Juke",
+   "year": 2012,
+   "body": "suv",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "1.6",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 227200,
+   "price_gel": 8310,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.723490+04:00",
+   "photo": "/demo/media/cars/42/80/7989572332ac4504.jpg",
+   "monthly_from": 165,
+   "companies": [
+    "Tera Auto",
+    "თიბისი ლიზინგი"
+   ],
+   "body_label": "ჯიპი / SUV",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/42/80/7989572332ac4504.jpg"
+   ],
+   "photo_credit": "Damian B Oh · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 154,
+     "company": "თიბისი ლიზინგი",
+     "term_months": 48,
+     "down_payment_gel": 2493,
+     "monthly_gel": 165
+    },
+    {
+     "id": 153,
+     "company": "Tera Auto",
+     "term_months": 36,
+     "down_payment_gel": 1662,
+     "monthly_gel": 240
+    }
+   ],
+   "seller": "demo-tera",
+   "offer_companies": [
+    "demo-tera",
+    "demo-tbc-leasing"
+   ]
+  },
+  {
+   "id": 79,
+   "make": "Nissan",
+   "model": "Tiida",
+   "year": 2004,
+   "body": "hatchback",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "1.5",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 209000,
+   "price_gel": 5720,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.711654+04:00",
+   "photo": "/demo/media/cars/42/79/74e6ef72f30cc242.jpg",
+   "monthly_from": 113,
+   "companies": [
+    "Tera Auto",
+    "თიბისი ლიზინგი"
+   ],
+   "body_label": "ჰეჩბეკი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/42/79/74e6ef72f30cc242.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 152,
+     "company": "თიბისი ლიზინგი",
+     "term_months": 48,
+     "down_payment_gel": 1716,
+     "monthly_gel": 113
+    },
+    {
+     "id": 151,
+     "company": "Tera Auto",
+     "term_months": 36,
+     "down_payment_gel": 1144,
+     "monthly_gel": 165
+    }
+   ],
+   "seller": "demo-tera",
+   "offer_companies": [
+    "demo-tera",
+    "demo-tbc-leasing"
+   ]
+  },
+  {
+   "id": 78,
+   "make": "Ford",
+   "model": "Transit",
+   "year": 2003,
+   "body": "minivan",
+   "fuel": "diesel",
+   "fuel_label": "დიზელი",
+   "engine": "2.4",
+   "transmission_label": "მექანიკური",
+   "mileage_km": 0,
+   "price_gel": 10500,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.699723+04:00",
+   "photo": "/demo/media/cars/41/78/0ed9f55a734a2ece.jpg",
+   "monthly_from": 208,
+   "companies": [
+    "Tera Auto",
+    "სკაპი"
+   ],
+   "body_label": "მინივენი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/41/78/0ed9f55a734a2ece.jpg"
+   ],
+   "photo_credit": "RL GNZLZ from Chile · CC BY-SA 2.0",
+   "offers": [
+    {
+     "id": 150,
+     "company": "Tera Auto",
+     "term_months": 48,
+     "down_payment_gel": 3150,
+     "monthly_gel": 208
+    },
+    {
+     "id": 149,
+     "company": "სკაპი",
+     "term_months": 36,
+     "down_payment_gel": 2100,
+     "monthly_gel": 304
+    }
+   ],
+   "seller": "demo-skapi",
+   "offer_companies": [
+    "demo-tera",
+    "demo-skapi"
+   ]
+  },
+  {
+   "id": 77,
+   "make": "Nissan",
+   "model": "Serena",
+   "year": 2016,
+   "body": "minivan",
+   "fuel": "hybrid",
+   "fuel_label": "ჰიბრიდი",
+   "engine": "2.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 0,
+   "price_gel": 17100,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.686640+04:00",
+   "photo": "/demo/media/cars/41/77/858fcf289de58cf8.jpg",
+   "monthly_from": 339,
+   "companies": [
+    "Tera Auto",
+    "სკაპი"
+   ],
+   "body_label": "მინივენი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/41/77/858fcf289de58cf8.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 148,
+     "company": "Tera Auto",
+     "term_months": 48,
+     "down_payment_gel": 5130,
+     "monthly_gel": 339
+    },
+    {
+     "id": 147,
+     "company": "სკაპი",
+     "term_months": 36,
+     "down_payment_gel": 3420,
+     "monthly_gel": 495
+    }
+   ],
+   "seller": "demo-skapi",
+   "offer_companies": [
+    "demo-tera",
+    "demo-skapi"
+   ]
+  },
+  {
+   "id": 76,
+   "make": "Opel",
+   "model": "Astra",
+   "year": 2006,
+   "body": "hatchback",
+   "fuel": "diesel",
+   "fuel_label": "დიზელი",
+   "engine": "2.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 0,
+   "price_gel": 1950,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.666603+04:00",
+   "photo": "/demo/media/cars/41/76/4708f5c76646a5ec.jpg",
+   "monthly_from": 39,
+   "companies": [
+    "Tera Auto",
+    "სკაპი"
+   ],
+   "body_label": "ჰეჩბეკი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/41/76/4708f5c76646a5ec.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 146,
+     "company": "Tera Auto",
+     "term_months": 48,
+     "down_payment_gel": 585,
+     "monthly_gel": 39
+    },
+    {
+     "id": 145,
+     "company": "სკაპი",
+     "term_months": 36,
+     "down_payment_gel": 390,
+     "monthly_gel": 56
+    }
+   ],
+   "seller": "demo-skapi",
+   "offer_companies": [
+    "demo-tera",
+    "demo-skapi"
+   ]
+  },
+  {
+   "id": 75,
+   "make": "Toyota",
+   "model": "RAV 4",
+   "year": 2015,
+   "body": "suv",
+   "fuel": "hybrid",
+   "fuel_label": "ჰიბრიდი",
+   "engine": "2.5",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 209000,
+   "price_gel": 32500,
+   "city": "ბათუმი",
+   "updated_at": "2026-10-21T16:03:31.653476+04:00",
+   "photo": "/demo/media/cars/40/75/fc7a4eb20b8c9bba.jpg",
+   "monthly_from": 645,
+   "companies": [
+    "სკაპი",
+    "ცენტრალი"
+   ],
+   "body_label": "ჯიპი / SUV",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/40/75/fc7a4eb20b8c9bba.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 144,
+     "company": "სკაპი",
+     "term_months": 48,
+     "down_payment_gel": 9750,
+     "monthly_gel": 645
+    },
+    {
+     "id": 143,
+     "company": "ცენტრალი",
+     "term_months": 36,
+     "down_payment_gel": 6500,
+     "monthly_gel": 940
+    }
+   ],
+   "seller": "demo-centrali",
+   "offer_companies": [
+    "demo-skapi",
+    "demo-centrali"
+   ]
+  },
+  {
+   "id": 74,
+   "make": "Lexus",
+   "model": "IS 250",
+   "year": 2014,
+   "body": "sedan",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "2.5",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 178811,
+   "price_gel": 24700,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.637111+04:00",
+   "photo": "/demo/media/cars/40/74/23ef06aaa73dd0ff.jpg",
+   "monthly_from": 490,
+   "companies": [
+    "სკაპი",
+    "ცენტრალი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/40/74/23ef06aaa73dd0ff.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 142,
+     "company": "სკაპი",
+     "term_months": 48,
+     "down_payment_gel": 7410,
+     "monthly_gel": 490
+    },
+    {
+     "id": 141,
+     "company": "ცენტრალი",
+     "term_months": 36,
+     "down_payment_gel": 4940,
+     "monthly_gel": 714
+    }
+   ],
+   "seller": "demo-centrali",
+   "offer_companies": [
+    "demo-skapi",
+    "demo-centrali"
+   ]
+  },
+  {
+   "id": 73,
+   "make": "Fiat",
+   "model": "Doblo",
+   "year": 2011,
+   "body": "minivan",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "1.4",
+   "transmission_label": "მექანიკური",
+   "mileage_km": 0,
+   "price_gel": 5720,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.618743+04:00",
+   "photo": "/demo/media/cars/40/73/aa528d823b829d0f.jpg",
+   "monthly_from": 113,
+   "companies": [
+    "სკაპი",
+    "ცენტრალი"
+   ],
+   "body_label": "მინივენი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/40/73/aa528d823b829d0f.jpg"
+   ],
+   "photo_credit": "order_242 from Chile · CC BY-SA 2.0",
+   "offers": [
+    {
+     "id": 140,
+     "company": "სკაპი",
+     "term_months": 48,
+     "down_payment_gel": 1716,
+     "monthly_gel": 113
+    },
+    {
+     "id": 139,
+     "company": "ცენტრალი",
+     "term_months": 36,
+     "down_payment_gel": 1144,
+     "monthly_gel": 165
+    }
+   ],
+   "seller": "demo-centrali",
+   "offer_companies": [
+    "demo-skapi",
+    "demo-centrali"
+   ]
+  },
+  {
+   "id": 72,
+   "make": "Jeep",
+   "model": "Grand Cherokee",
+   "year": 2015,
+   "body": "suv",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "3.6",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 282193,
+   "price_gel": 22100,
+   "city": "რუსთავი",
+   "updated_at": "2026-10-21T16:03:31.603298+04:00",
+   "photo": "/demo/media/cars/39/72/3f7d1c9baf354d6e.jpg",
+   "monthly_from": 438,
+   "companies": [
+    "შპს დიზი",
+    "ცენტრალი"
+   ],
+   "body_label": "ჯიპი / SUV",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/39/72/3f7d1c9baf354d6e.jpg"
+   ],
+   "photo_credit": "Alexander Migl · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 138,
+     "company": "ცენტრალი",
+     "term_months": 48,
+     "down_payment_gel": 6630,
+     "monthly_gel": 438
+    },
+    {
+     "id": 137,
+     "company": "შპს დიზი",
+     "term_months": 36,
+     "down_payment_gel": 4420,
+     "monthly_gel": 639
+    }
+   ],
+   "seller": "demo-dizi",
+   "offer_companies": [
+    "demo-dizi",
+    "demo-centrali"
+   ]
+  },
+  {
+   "id": 71,
+   "make": "Volkswagen",
+   "model": "Jetta",
+   "year": 2015,
+   "body": "sedan",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "1.4",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 205602,
+   "price_gel": 12500,
+   "city": "რუსთავი",
+   "updated_at": "2026-10-21T16:03:31.589009+04:00",
+   "photo": "/demo/media/cars/39/71/6745fe85faccf0df.jpg",
+   "monthly_from": 248,
+   "companies": [
+    "შპს დიზი",
+    "ცენტრალი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/39/71/6745fe85faccf0df.jpg"
+   ],
+   "photo_credit": "M 93 · CC BY-SA 3.0 de",
+   "offers": [
+    {
+     "id": 136,
+     "company": "ცენტრალი",
+     "term_months": 48,
+     "down_payment_gel": 3750,
+     "monthly_gel": 248
+    },
+    {
+     "id": 135,
+     "company": "შპს დიზი",
+     "term_months": 36,
+     "down_payment_gel": 2500,
+     "monthly_gel": 362
+    }
+   ],
+   "seller": "demo-dizi",
+   "offer_companies": [
+    "demo-dizi",
+    "demo-centrali"
+   ]
+  },
+  {
+   "id": 70,
+   "make": "Mercedes-Benz",
+   "model": "ML 350",
+   "year": 2006,
+   "body": "suv",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "3.5",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 284663,
+   "price_gel": 7530,
+   "city": "რუსთავი",
+   "updated_at": "2026-10-21T16:03:31.572977+04:00",
+   "photo": "/demo/media/cars/39/70/ccb4c6630cfda957.jpg",
+   "monthly_from": 149,
+   "companies": [
+    "შპს დიზი",
+    "ცენტრალი"
+   ],
+   "body_label": "ჯიპი / SUV",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/39/70/ccb4c6630cfda957.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 134,
+     "company": "ცენტრალი",
+     "term_months": 48,
+     "down_payment_gel": 2259,
+     "monthly_gel": 149
+    },
+    {
+     "id": 133,
+     "company": "შპს დიზი",
+     "term_months": 36,
+     "down_payment_gel": 1506,
+     "monthly_gel": 218
+    }
+   ],
+   "seller": "demo-dizi",
+   "offer_companies": [
+    "demo-dizi",
+    "demo-centrali"
+   ]
+  },
+  {
+   "id": 69,
+   "make": "Lexus",
+   "model": "CT 200h",
+   "year": 2014,
+   "body": "hatchback",
+   "fuel": "hybrid",
+   "fuel_label": "ჰიბრიდი",
+   "engine": "1.8",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 172643,
+   "price_gel": 18500,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.558064+04:00",
+   "photo": "/demo/media/cars/38/69/993208a3b355cd6f.jpg",
+   "monthly_from": 367,
+   "companies": [
+    "MOGO",
+    "შპს დიზი"
+   ],
+   "body_label": "ჰეჩბეკი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/38/69/993208a3b355cd6f.jpg"
+   ],
+   "photo_credit": "Alexander Migl · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 132,
+     "company": "შპს დიზი",
+     "term_months": 48,
+     "down_payment_gel": 5550,
+     "monthly_gel": 367
+    },
+    {
+     "id": 131,
+     "company": "MOGO",
+     "term_months": 36,
+     "down_payment_gel": 3700,
+     "monthly_gel": 535
+    }
+   ],
+   "seller": "demo-mogo",
+   "offer_companies": [
+    "demo-mogo",
+    "demo-dizi"
+   ]
+  },
+  {
+   "id": 68,
+   "make": "Ford",
+   "model": "Focus",
+   "year": 2012,
+   "body": "sedan",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "2.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 356413,
+   "price_gel": 6000,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.542965+04:00",
+   "photo": "/demo/media/cars/38/68/13151fb6fdce88e9.jpg",
+   "monthly_from": 119,
+   "companies": [
+    "MOGO",
+    "შპს დიზი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/38/68/13151fb6fdce88e9.jpg"
+   ],
+   "photo_credit": "Ezarate · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 130,
+     "company": "შპს დიზი",
+     "term_months": 48,
+     "down_payment_gel": 1800,
+     "monthly_gel": 119
+    },
+    {
+     "id": 129,
+     "company": "MOGO",
+     "term_months": 36,
+     "down_payment_gel": 1200,
+     "monthly_gel": 174
+    }
+   ],
+   "seller": "demo-mogo",
+   "offer_companies": [
+    "demo-mogo",
+    "demo-dizi"
+   ]
+  },
+  {
+   "id": 67,
+   "make": "Mercedes-Benz",
+   "model": "E 320",
+   "year": 2004,
+   "body": "sedan",
+   "fuel": "diesel",
+   "fuel_label": "დიზელი",
+   "engine": "3.2",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 287676,
+   "price_gel": 4800,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.530642+04:00",
+   "photo": "/demo/media/cars/38/67/5626540e42adf5f3.jpg",
+   "monthly_from": 95,
+   "companies": [
+    "MOGO",
+    "შპს დიზი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/38/67/5626540e42adf5f3.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 128,
+     "company": "შპს დიზი",
+     "term_months": 48,
+     "down_payment_gel": 1440,
+     "monthly_gel": 95
+    },
+    {
+     "id": 127,
+     "company": "MOGO",
+     "term_months": 36,
+     "down_payment_gel": 960,
+     "monthly_gel": 139
+    }
+   ],
+   "seller": "demo-mogo",
+   "offer_companies": [
+    "demo-mogo",
+    "demo-dizi"
+   ]
+  },
+  {
+   "id": 66,
+   "make": "Volkswagen",
+   "model": "CC",
+   "year": 2010,
+   "body": "sedan",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "2.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 197866,
+   "price_gel": 7900,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.519148+04:00",
+   "photo": "/demo/media/cars/37/66/1d1add6db6a12306.jpg",
+   "monthly_from": 157,
+   "companies": [
+    "MOGO",
+    "მისო ევრო კრედიტი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/37/66/1d1add6db6a12306.jpg"
+   ],
+   "photo_credit": "order_242 from Chile · CC BY-SA 2.0",
+   "offers": [
+    {
+     "id": 126,
+     "company": "MOGO",
+     "term_months": 48,
+     "down_payment_gel": 2370,
+     "monthly_gel": 157
+    },
+    {
+     "id": 125,
+     "company": "მისო ევრო კრედიტი",
+     "term_months": 36,
+     "down_payment_gel": 1580,
+     "monthly_gel": 228
+    }
+   ],
+   "seller": "demo-miso-euro",
+   "offer_companies": [
+    "demo-mogo",
+    "demo-miso-euro"
+   ]
+  },
+  {
+   "id": 65,
+   "make": "Chevrolet",
+   "model": "Cruze",
+   "year": 2015,
+   "body": "sedan",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "1.4",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 206985,
+   "price_gel": 8800,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.506533+04:00",
+   "photo": "/demo/media/cars/37/65/fb91b4202f7cb249.jpg",
+   "monthly_from": 175,
+   "companies": [
+    "MOGO",
+    "მისო ევრო კრედიტი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/37/65/fb91b4202f7cb249.jpg"
+   ],
+   "photo_credit": "EurovisionNim · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 124,
+     "company": "MOGO",
+     "term_months": 48,
+     "down_payment_gel": 2640,
+     "monthly_gel": 175
+    },
+    {
+     "id": 123,
+     "company": "მისო ევრო კრედიტი",
+     "term_months": 36,
+     "down_payment_gel": 1760,
+     "monthly_gel": 255
+    }
+   ],
+   "seller": "demo-miso-euro",
+   "offer_companies": [
+    "demo-mogo",
+    "demo-miso-euro"
+   ]
+  },
+  {
+   "id": 64,
+   "make": "Hyundai",
+   "model": "Tucson",
+   "year": 2016,
+   "body": "suv",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "2.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 168634,
+   "price_gel": 17200,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.493437+04:00",
+   "photo": "/demo/media/cars/37/64/ef663fcda037ffa4.jpg",
+   "monthly_from": 341,
+   "companies": [
+    "MOGO",
+    "მისო ევრო კრედიტი"
+   ],
+   "body_label": "ჯიპი / SUV",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/37/64/ef663fcda037ffa4.jpg"
+   ],
+   "photo_credit": "JustAnotherCarDesigner · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 122,
+     "company": "MOGO",
+     "term_months": 48,
+     "down_payment_gel": 5160,
+     "monthly_gel": 341
+    },
+    {
+     "id": 121,
+     "company": "მისო ევრო კრედიტი",
+     "term_months": 36,
+     "down_payment_gel": 3440,
+     "monthly_gel": 497
+    }
+   ],
+   "seller": "demo-miso-euro",
+   "offer_companies": [
+    "demo-mogo",
+    "demo-miso-euro"
+   ]
+  },
+  {
+   "id": 63,
+   "make": "Ford",
+   "model": "Fusion",
+   "year": 2014,
+   "body": "sedan",
+   "fuel": "hybrid",
+   "fuel_label": "ჰიბრიდი",
+   "engine": "2.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 378720,
+   "price_gel": 10000,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.480334+04:00",
+   "photo": "/demo/media/cars/36/63/dc2dcdface6ee275.jpg",
+   "monthly_from": 198,
+   "companies": [
+    "მისო ევრო კრედიტი",
+    "შპს მისო ლიდერ კრედიტი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/36/63/dc2dcdface6ee275.jpg"
+   ],
+   "photo_credit": "2013_Ford_Fusion_Hybrid.jpg: Stradablog (Tino Rossini)\nderivative work: Mariordo · CC BY 2.0",
+   "offers": [
+    {
+     "id": 120,
+     "company": "მისო ევრო კრედიტი",
+     "term_months": 48,
+     "down_payment_gel": 3000,
+     "monthly_gel": 198
+    },
+    {
+     "id": 119,
+     "company": "შპს მისო ლიდერ კრედიტი",
+     "term_months": 36,
+     "down_payment_gel": 2000,
+     "monthly_gel": 289
+    }
+   ],
+   "seller": "demo-miso-leader",
+   "offer_companies": [
+    "demo-miso-euro",
+    "demo-miso-leader"
+   ]
+  },
+  {
+   "id": 62,
+   "make": "Ford",
+   "model": "Focus",
+   "year": 2015,
+   "body": "hatchback",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "2.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 204400,
+   "price_gel": 5200,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.465925+04:00",
+   "photo": "/demo/media/cars/36/62/4e4f2e188bed1fb2.jpg",
+   "monthly_from": 103,
+   "companies": [
+    "მისო ევრო კრედიტი",
+    "შპს მისო ლიდერ კრედიტი"
+   ],
+   "body_label": "ჰეჩბეკი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/36/62/4e4f2e188bed1fb2.jpg"
+   ],
+   "photo_credit": "JamesYoung8167 · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 118,
+     "company": "მისო ევრო კრედიტი",
+     "term_months": 48,
+     "down_payment_gel": 1560,
+     "monthly_gel": 103
+    },
+    {
+     "id": 117,
+     "company": "შპს მისო ლიდერ კრედიტი",
+     "term_months": 36,
+     "down_payment_gel": 1040,
+     "monthly_gel": 150
+    }
+   ],
+   "seller": "demo-miso-leader",
+   "offer_companies": [
+    "demo-miso-euro",
+    "demo-miso-leader"
+   ]
+  },
+  {
+   "id": 61,
+   "make": "BMW",
+   "model": "528",
+   "year": 2014,
+   "body": "sedan",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "2.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 214200,
+   "price_gel": 18200,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.449953+04:00",
+   "photo": "/demo/media/cars/36/61/a55ad5d11726c2e2.jpg",
+   "monthly_from": 361,
+   "companies": [
+    "მისო ევრო კრედიტი",
+    "შპს მისო ლიდერ კრედიტი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/36/61/a55ad5d11726c2e2.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 116,
+     "company": "მისო ევრო კრედიტი",
+     "term_months": 48,
+     "down_payment_gel": 5460,
+     "monthly_gel": 361
+    },
+    {
+     "id": 115,
+     "company": "შპს მისო ლიდერ კრედიტი",
+     "term_months": 36,
+     "down_payment_gel": 3640,
+     "monthly_gel": 526
+    }
+   ],
+   "seller": "demo-miso-leader",
+   "offer_companies": [
+    "demo-miso-euro",
+    "demo-miso-leader"
+   ]
+  },
+  {
+   "id": 60,
+   "make": "Kia",
+   "model": "Cadenza",
+   "year": 2010,
+   "body": "sedan",
+   "fuel": "gas",
+   "fuel_label": "გაზი",
+   "engine": "2.7",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 332692,
+   "price_gel": 6490,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.437084+04:00",
+   "photo": "/demo/media/cars/35/60/930d78253ec62364.jpg",
+   "monthly_from": 129,
+   "companies": [
+    "სილქ ბანკი",
+    "შპს მისო ლიდერ კრედიტი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/35/60/930d78253ec62364.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 114,
+     "company": "შპს მისო ლიდერ კრედიტი",
+     "term_months": 48,
+     "down_payment_gel": 1947,
+     "monthly_gel": 129
+    },
+    {
+     "id": 113,
+     "company": "სილქ ბანკი",
+     "term_months": 36,
+     "down_payment_gel": 1298,
+     "monthly_gel": 188
+    }
+   ],
+   "seller": "demo-silk",
+   "offer_companies": [
+    "demo-silk",
+    "demo-miso-leader"
+   ]
+  },
+  {
+   "id": 59,
+   "make": "Porsche",
+   "model": "Macan",
+   "year": 2015,
+   "body": "suv",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "3.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 244369,
+   "price_gel": 28600,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.422902+04:00",
+   "photo": "/demo/media/cars/35/59/1b311306f4c7da85.jpg",
+   "monthly_from": 567,
+   "companies": [
+    "სილქ ბანკი",
+    "შპს მისო ლიდერ კრედიტი"
+   ],
+   "body_label": "ჯიპი / SUV",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/35/59/1b311306f4c7da85.jpg"
+   ],
+   "photo_credit": "Calreyn88 · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 112,
+     "company": "შპს მისო ლიდერ კრედიტი",
+     "term_months": 48,
+     "down_payment_gel": 8580,
+     "monthly_gel": 567
+    },
+    {
+     "id": 111,
+     "company": "სილქ ბანკი",
+     "term_months": 36,
+     "down_payment_gel": 5720,
+     "monthly_gel": 827
+    }
+   ],
+   "seller": "demo-silk",
+   "offer_companies": [
+    "demo-silk",
+    "demo-miso-leader"
+   ]
+  },
+  {
+   "id": 58,
+   "make": "Toyota",
+   "model": "Camry",
+   "year": 2019,
+   "body": "sedan",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "2.5",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 206339,
+   "price_gel": 26800,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.407436+04:00",
+   "photo": "/demo/media/cars/35/58/57163fe08780c457.jpg",
+   "monthly_from": 532,
+   "companies": [
+    "სილქ ბანკი",
+    "შპს მისო ლიდერ კრედიტი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/35/58/57163fe08780c457.jpg"
+   ],
+   "photo_credit": "Alexander-93 · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 110,
+     "company": "შპს მისო ლიდერ კრედიტი",
+     "term_months": 48,
+     "down_payment_gel": 8040,
+     "monthly_gel": 532
+    },
+    {
+     "id": 109,
+     "company": "სილქ ბანკი",
+     "term_months": 36,
+     "down_payment_gel": 5360,
+     "monthly_gel": 775
+    }
+   ],
+   "seller": "demo-silk",
+   "offer_companies": [
+    "demo-silk",
+    "demo-miso-leader"
+   ]
+  },
+  {
+   "id": 57,
+   "make": "Toyota",
+   "model": "Avalon",
+   "year": 2015,
+   "body": "sedan",
+   "fuel": "hybrid",
+   "fuel_label": "ჰიბრიდი",
+   "engine": "2.5",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 365994,
+   "price_gel": 16900,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.394852+04:00",
+   "photo": "/demo/media/cars/34/57/2accfa7938850c10.jpg",
+   "monthly_from": 335,
+   "companies": [
+    "Liberty Bank",
+    "სილქ ბანკი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/34/57/2accfa7938850c10.jpg"
+   ],
+   "photo_credit": "Alexander Migl · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 108,
+     "company": "სილქ ბანკი",
+     "term_months": 48,
+     "down_payment_gel": 5070,
+     "monthly_gel": 335
+    },
+    {
+     "id": 107,
+     "company": "Liberty Bank",
+     "term_months": 36,
+     "down_payment_gel": 3380,
+     "monthly_gel": 489
+    }
+   ],
+   "seller": "demo-liberty",
+   "offer_companies": [
+    "demo-liberty",
+    "demo-silk"
+   ]
+  },
+  {
+   "id": 56,
+   "make": "Land Rover",
+   "model": "Range Rover Sport",
+   "year": 2016,
+   "body": "suv",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "3.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 0,
+   "price_gel": 39000,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.382732+04:00",
+   "photo": "/demo/media/cars/34/56/03424c5751c8dd9c.jpg",
+   "monthly_from": 774,
+   "companies": [
+    "Liberty Bank",
+    "სილქ ბანკი"
+   ],
+   "body_label": "ჯიპი / SUV",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/34/56/03424c5751c8dd9c.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 106,
+     "company": "სილქ ბანკი",
+     "term_months": 48,
+     "down_payment_gel": 11700,
+     "monthly_gel": 774
+    },
+    {
+     "id": 105,
+     "company": "Liberty Bank",
+     "term_months": 36,
+     "down_payment_gel": 7800,
+     "monthly_gel": 1128
+    }
+   ],
+   "seller": "demo-liberty",
+   "offer_companies": [
+    "demo-liberty",
+    "demo-silk"
+   ]
+  },
+  {
+   "id": 55,
+   "make": "Mercedes-Benz",
+   "model": "E 350",
+   "year": 2013,
+   "body": "sedan",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "3.5",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 265188,
+   "price_gel": 20800,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.369723+04:00",
+   "photo": "/demo/media/cars/34/55/4b96806ef85c5ebe.jpg",
+   "monthly_from": 413,
+   "companies": [
+    "Liberty Bank",
+    "სილქ ბანკი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/34/55/4b96806ef85c5ebe.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 104,
+     "company": "სილქ ბანკი",
+     "term_months": 48,
+     "down_payment_gel": 6240,
+     "monthly_gel": 413
+    },
+    {
+     "id": 103,
+     "company": "Liberty Bank",
+     "term_months": 36,
+     "down_payment_gel": 4160,
+     "monthly_gel": 602
+    }
+   ],
+   "seller": "demo-liberty",
+   "offer_companies": [
+    "demo-liberty",
+    "demo-silk"
+   ]
+  },
+  {
+   "id": 54,
+   "make": "Hyundai",
+   "model": "Elantra",
+   "year": 2020,
+   "body": "sedan",
+   "fuel": "gas",
+   "fuel_label": "გაზი",
+   "engine": "2.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 154000,
+   "price_gel": 14000,
+   "city": "რუსთავი",
+   "updated_at": "2026-10-21T16:03:31.357815+04:00",
+   "photo": "/demo/media/cars/33/54/a0fa12db3655489c.jpg",
+   "monthly_from": 278,
+   "companies": [
+    "Liberty Bank",
+    "კრედო ბანკი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/33/54/a0fa12db3655489c.jpg"
+   ],
+   "photo_credit": "Kevauto · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 102,
+     "company": "Liberty Bank",
+     "term_months": 48,
+     "down_payment_gel": 4200,
+     "monthly_gel": 278
+    },
+    {
+     "id": 101,
+     "company": "კრედო ბანკი",
+     "term_months": 36,
+     "down_payment_gel": 2800,
+     "monthly_gel": 405
+    }
+   ],
+   "seller": "demo-credo",
+   "offer_companies": [
+    "demo-liberty",
+    "demo-credo"
+   ]
+  },
+  {
+   "id": 53,
+   "make": "Toyota",
+   "model": "Prius",
+   "year": 2014,
+   "body": "hatchback",
+   "fuel": "hybrid",
+   "fuel_label": "ჰიბრიდი",
+   "engine": "1.8",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 0,
+   "price_gel": 5800,
+   "city": "რუსთავი",
+   "updated_at": "2026-10-21T16:03:31.345688+04:00",
+   "photo": "/demo/media/cars/33/53/feceaa9758c329a4.jpg",
+   "monthly_from": 115,
+   "companies": [
+    "Liberty Bank",
+    "კრედო ბანკი"
+   ],
+   "body_label": "ჰეჩბეკი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/33/53/feceaa9758c329a4.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 100,
+     "company": "Liberty Bank",
+     "term_months": 48,
+     "down_payment_gel": 1740,
+     "monthly_gel": 115
+    },
+    {
+     "id": 99,
+     "company": "კრედო ბანკი",
+     "term_months": 36,
+     "down_payment_gel": 1160,
+     "monthly_gel": 168
+    }
+   ],
+   "seller": "demo-credo",
+   "offer_companies": [
+    "demo-liberty",
+    "demo-credo"
+   ]
+  },
+  {
+   "id": 52,
+   "make": "Toyota",
+   "model": "Prius C",
+   "year": 2014,
+   "body": "hatchback",
+   "fuel": "hybrid",
+   "fuel_label": "ჰიბრიდი",
+   "engine": "1.5",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 0,
+   "price_gel": 6500,
+   "city": "რუსთავი",
+   "updated_at": "2026-10-21T16:03:31.334260+04:00",
+   "photo": "/demo/media/cars/33/52/2d3f14c407252657.jpg",
+   "monthly_from": 129,
+   "companies": [
+    "Liberty Bank",
+    "კრედო ბანკი"
+   ],
+   "body_label": "ჰეჩბეკი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/33/52/2d3f14c407252657.jpg"
+   ],
+   "photo_credit": "Alexander-93 · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 98,
+     "company": "Liberty Bank",
+     "term_months": 48,
+     "down_payment_gel": 1950,
+     "monthly_gel": 129
+    },
+    {
+     "id": 97,
+     "company": "კრედო ბანკი",
+     "term_months": 36,
+     "down_payment_gel": 1300,
+     "monthly_gel": 188
+    }
+   ],
+   "seller": "demo-credo",
+   "offer_companies": [
+    "demo-liberty",
+    "demo-credo"
+   ]
+  },
+  {
+   "id": 51,
+   "make": "Ford",
+   "model": "Fusion",
+   "year": 2017,
+   "body": "sedan",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "2.5",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 246343,
+   "price_gel": 14900,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.323724+04:00",
+   "photo": "/demo/media/cars/32/51/93f59ca5eda47ed3.jpg",
+   "monthly_from": 296,
+   "companies": [
+    "თიბისი ლიზინგი",
+    "კრედო ბანკი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/32/51/93f59ca5eda47ed3.jpg"
+   ],
+   "photo_credit": "Yahya S. · CC BY 2.0",
+   "offers": [
+    {
+     "id": 96,
+     "company": "კრედო ბანკი",
+     "term_months": 48,
+     "down_payment_gel": 4470,
+     "monthly_gel": 296
+    },
+    {
+     "id": 95,
+     "company": "თიბისი ლიზინგი",
+     "term_months": 36,
+     "down_payment_gel": 2980,
+     "monthly_gel": 431
+    }
+   ],
+   "seller": "demo-tbc-leasing",
+   "offer_companies": [
+    "demo-tbc-leasing",
+    "demo-credo"
+   ]
+  },
+  {
+   "id": 50,
+   "make": "BMW",
+   "model": "X3 M",
+   "year": 2025,
+   "body": "suv",
+   "fuel": "petrol",
+   "fuel_label": "ბენზინი",
+   "engine": "3.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 23564,
+   "price_gel": 161800,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.312313+04:00",
+   "photo": "/demo/media/cars/32/50/b49c9c6080137f90.jpg",
+   "monthly_from": 3210,
+   "companies": [
+    "თიბისი ლიზინგი",
+    "კრედო ბანკი"
+   ],
+   "body_label": "ჯიპი / SUV",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/32/50/b49c9c6080137f90.jpg"
+   ],
+   "photo_credit": "Alexander-93 · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 94,
+     "company": "კრედო ბანკი",
+     "term_months": 48,
+     "down_payment_gel": 48540,
+     "monthly_gel": 3210
+    },
+    {
+     "id": 93,
+     "company": "თიბისი ლიზინგი",
+     "term_months": 36,
+     "down_payment_gel": 32360,
+     "monthly_gel": 4680
+    }
+   ],
+   "seller": "demo-tbc-leasing",
+   "offer_companies": [
+    "demo-tbc-leasing",
+    "demo-credo"
+   ]
+  },
+  {
+   "id": 49,
+   "make": "Mercedes-Benz",
+   "model": "S 350",
+   "year": 2014,
+   "body": "sedan",
+   "fuel": "diesel",
+   "fuel_label": "დიზელი",
+   "engine": "3.0",
+   "transmission_label": "ავტომატური",
+   "mileage_km": 129276,
+   "price_gel": 57900,
+   "city": "თბილისი",
+   "updated_at": "2026-10-21T16:03:31.301383+04:00",
+   "photo": "/demo/media/cars/32/49/60b9600b74bab08c.jpg",
+   "monthly_from": 1149,
+   "companies": [
+    "თიბისი ლიზინგი",
+    "კრედო ბანკი"
+   ],
+   "body_label": "სედანი",
+   "description": "",
+   "photos": [
+    "/demo/media/cars/32/49/60b9600b74bab08c.jpg"
+   ],
+   "photo_credit": "Dinkun Chen · CC BY-SA 4.0",
+   "offers": [
+    {
+     "id": 92,
+     "company": "კრედო ბანკი",
+     "term_months": 48,
+     "down_payment_gel": 17370,
+     "monthly_gel": 1149
+    },
+    {
+     "id": 91,
+     "company": "თიბისი ლიზინგი",
+     "term_months": 36,
+     "down_payment_gel": 11580,
+     "monthly_gel": 1675
+    }
+   ],
+   "seller": "demo-tbc-leasing",
+   "offer_companies": [
+    "demo-tbc-leasing",
+    "demo-credo"
+   ]
+  }
+ ]
+}

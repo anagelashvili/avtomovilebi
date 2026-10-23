@@ -1,7 +1,12 @@
 import { cacheLife, cacheTag } from "next/cache";
+import { demoCar, demoCars, demoCompanies, demoFilters } from "./demo";
 
 // Server-side only: the Django API's base URL.
 export const API_URL = process.env.API_URL ?? "http://127.0.0.1:8000";
+
+/** No API to talk to: on Vercel without API_URL, or DEMO_DATA=1. Pages then
+ * show the saved demo data (lib/demo.ts) and applications can't be sent. */
+export const DEMO = process.env.DEMO_DATA === "1" || (!process.env.API_URL && process.env.VERCEL === "1");
 
 export type CarCard = {
   id: number;
@@ -61,6 +66,7 @@ export async function getCars(query = ""): Promise<CarPage> {
   "use cache";
   cacheLife("minutes");
   cacheTag("cars");
+  if (DEMO) return demoCars(query);
   return (await getJson<CarPage>(`/api/public/cars/?${query}`))!;
 }
 
@@ -69,6 +75,7 @@ export async function getCar(id: string): Promise<CarDetail | null> {
   cacheLife("minutes");
   cacheTag("cars", `car:${id}`);
   if (!/^\d+$/.test(id)) return null;
+  if (DEMO) return demoCar(id);
   return getJson<CarDetail>(`/api/public/cars/${id}/`);
 }
 
@@ -91,6 +98,7 @@ export async function getCompanies(): Promise<Company[]> {
   "use cache";
   cacheLife("minutes");
   cacheTag("companies");
+  if (DEMO) return demoCompanies;
   return (await getJson<Company[]>("/api/public/companies/"))!;
 }
 
@@ -99,6 +107,7 @@ export async function getCompany(code: string): Promise<Company | null> {
   cacheLife("minutes");
   cacheTag("companies", `company:${code}`);
   if (!/^[\w-]+$/.test(code)) return null;
+  if (DEMO) return demoCompanies.find((c) => c.code === code) ?? null;
   return getJson<Company>(`/api/public/companies/${code}/`);
 }
 
@@ -106,5 +115,6 @@ export async function getFilters(): Promise<Filters> {
   "use cache";
   cacheLife("hours");
   cacheTag("filters");
+  if (DEMO) return demoFilters;
   return (await getJson<Filters>("/api/public/filters/"))!;
 }

@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { API_URL } from "@/lib/api";
+import { API_URL, DEMO } from "@/lib/api";
 
 export type ApplyState =
   | { status: "idle" }
@@ -26,6 +26,10 @@ export async function submitApplication(_prev: ApplyState, form: FormData): Prom
   body.consent = form.get("consent") === "on";
   if (!body.offer) {
     return { status: "error", fields: { offer: "აირჩიეთ ლიზინგის შეთავაზება." } };
+  }
+
+  if (DEMO) {
+    return { status: "error", message: "ეს საიტის სადემონსტრაციო ვერსიაა — განაცხადის გაგზავნა ჯერ არ მუშაობს.", fields: {} };
   }
 
   body.website = String(form.get("website") ?? ""); // honeypot
